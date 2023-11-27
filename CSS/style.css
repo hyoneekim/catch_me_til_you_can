@@ -3,19 +3,32 @@ html {
 }
 
 body {
-    background-color: #E7E8E9;
+    background-color: #B1C7D4;
+}
+
+#logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 40%;
+}
+#btns {
+
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  width: 60%;
+
+
 }
 
 .gray {
     color: #758691;
 }
 
-button {
-    margin: 2rem;
-}
 
 .button-19 {
-
   background-color: #1899D6;
   border: solid transparent;
   border-radius: 16px;
@@ -29,7 +42,7 @@ button {
   font-weight: 700;
   letter-spacing: .8px;
   line-height: 20px;
-  margin: 0;
+  margin: 0.5rem;
   outline: none;
   overflow: visible;
   padding: 13px 16px;
