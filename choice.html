@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/CSS/style.css" rel="stylesheet">
+</head>
+<body>
+<h2 class="gray">Choose your plane!</h2>
+<button id = "big" onclick="change1()">big airplane</button>
+<button id = "medium" onclick="change2()">medium airplane</button>
+<button id = "small" onclick="change3()">small airplane</button>
+<button id = "helicopter" onclick="change4()">helicopter</button>
+<img id = "placeholder" src = 'https://via.placeholder.com/210x295?text=planepic1' width="700px" height="550px">
+<button id="destination">Show the destination</button>
+<script>
+    'use strict';
+    const img = document.getElementById('placeholder');
+    function change1(){
+      img.src = 'https://via.placeholder.com/210x295?text=planepic1'
+    }
+    function change2(){
+      img.src = 'https://via.placeholder.com/210x295?text=planepic2'
+    }
+    function change3(){
+      img.src = 'https://via.placeholder.com/210x295?text=planepic3'
+    }
+    function change4(){
+      img.src = 'https://via.placeholder.com/210x295?text=planepic4'
+    }
+</script>
+</body>
+</html>

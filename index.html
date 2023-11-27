@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Catch me, 'til you can!</title>
+    <link href="/CSS/style.css" rel="stylesheet">
+
+    <h1 class = "gray">Catch me, 'til you can!</h1>
+    <container>
+    <button id = "start" class = "button-19" role="button" onclick="location.href='main.html'">Start Game</button><br>
+    <button id = "tutorial" class = "button-19" role="button">Tutorial</button><br>
+    <button id = "score" class = "button-19" role="button" onclick="location.href='score.html'">Score Board</button><br>
+    <button id = "exit" class = "button-19" role="button">Exit Game</button>
+    </container>
+</head>
+<body>
+<script>
+    'use strict';
+    const tutorial = document.getElementById('tutorial');
+    tutorial.addEventListener('click', (evt)=> {
+      alert(`You're going to travel across the world by choosing a flight.
+Your GOAL is to travel as far as you can go with your limited co2 budget!
+The game ends when you have spent all the budget and can't go anywhere anymore.
+
+Good luck!`);
+    })
+
+</script>
+
+
+</body>
+</html>

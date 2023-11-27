@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+      <link href="/CSS/style.css" rel="stylesheet">
+</head>
+<body>
+<h2 class="gray"> ROUND *</h2>
+<button id = "quit" class = "button-19" role="button" onclick="quit_ask()">Quit</button>
+<container id = "status">
+    <ul>
+        <li>player ID</li>
+        <li>Current Location :</li>
+        <li>Remaining Co2 Budget:</li>
+        <li>Travelled Distance:</li>
+    </ul>
+</container>
+<img id = "placeholder" src = 'https://via.placeholder.com/210x295?text=map' width="1000px" height="740px">
+<button id = "start" class = "button-19" role="button" onclick="location.href='choice.html'">Let's make a move!</button>
+<script>
+  'use strict';
+  function quit_ask(){
+  const quit = confirm(`Are you sure you want to quit? All unsaved progress will be lost.`);
+
+  if (quit){
+    return location.href ="index.html"
+  }
+  }
+</script>
+</body>
+</html>
