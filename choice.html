@@ -6,13 +6,17 @@
     <link href="/CSS/style.css" rel="stylesheet">
 </head>
 <body>
-<h2 class="gray">Choose your plane!</h2>
-<button id = "big" onclick="change1()">big airplane</button>
-<button id = "medium" onclick="change2()">medium airplane</button>
-<button id = "small" onclick="change3()">small airplane</button>
-<button id = "helicopter" onclick="change4()">helicopter</button>
+<div class ="container" id="choose">
+    <h2 class="gray">Choose your plane!</h2>
+</div>
+<div id ="choice_bar">
+<button id = "big" class = "button-19" onclick="change1()">Boeing 747</button>
+<button id = "medium" class = "button-19" onclick="change2()">Boeing 797</button>
+<button id = "small" class = "button-19" onclick="change3()">Private Jet</button>
+<button id = "helicopter" class = "button-19" onclick="change4()">Helicopter</button>
+    </div>
 <img id = "placeholder" src = 'https://via.placeholder.com/210x295?text=planepic1' width="700px" height="550px">
-<button id="destination">Show the destination</button>
+<footer><button id="destination" class = "button-19">Show the destination</button></footer>
 <script>
     'use strict';
     const img = document.getElementById('placeholder');

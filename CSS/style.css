@@ -3,8 +3,10 @@ html {
 }
 
 body {
-    background-color: #B1C7D4;
+    background-color: #04C4D9;
 }
+
+/* front page starts*/
 
 #logo {
   display: block;
@@ -12,6 +14,7 @@ body {
   margin-right: auto;
   width: 40%;
 }
+/* buttons in front page */
 #btns {
 
   display: block;
@@ -23,10 +26,8 @@ body {
 
 }
 
-.gray {
-    color: #758691;
-}
 
+/* button style starts*/
 
 .button-19 {
   background-color: #1899D6;
@@ -90,7 +91,61 @@ body {
   border-width: 4px 0 0;
   background: none;
 }
+/* button style ends */
+/* front page ends*/
+
+/* main page starts */
+
+#quit{
+  width: 30%;
+}
+
+.container {
+  background-color: #F2CB05;
+  text-align: right;
+  padding: 1rem;
+}
+
+article {
+  width: calc(100% / 3 - 2rem);
+  background-color: #F2AF5C;
+  box-sizing: border-box;
+  cursor: pointer;
+  padding: 1rem;
+  border-radius: 6px;
+  box-shadow: 3px 6px 6px #BF9004;
+  transition: all 0.2s ease-in-out;
+  line-height: 2rem;
+}
+
+article:hover {
+  transform: scale(1.02);
+  box-shadow: 0px 0px 2px #ccc;
+}
+
+article h2 {
+  margin: 0;
+  text-align: center;
+  padding: 0 0 0.5rem 0;
+}
+
 
 #status ul li {
   list-style-type: none;
+}
+
+footer {
+  background-color: #F2CB05;
+  text-align: right;
+  padding: 1rem;
+
+}
+
+/* choice starts */
+
+#choose {
+  text-align: left;
+}
+#choice_bar {
+  width: 40%;
 }
