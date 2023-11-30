@@ -116,6 +116,7 @@ article {
   box-shadow: 3px 6px 6px #BF9004;
   transition: all 0.2s ease-in-out;
   line-height: 2rem;
+  display: inline-block;
 }
 
 article:hover {
@@ -133,7 +134,11 @@ article h2 {
 #status ul li {
   list-style-type: none;
 }
-
+#placeholder {
+  display: inline-block;
+  width: 60%;
+  margin: 2rem;
+}
 footer {
   background-color: #F2CB05;
   text-align: right;
@@ -142,10 +147,23 @@ footer {
 }
 
 /* choice starts */
-
+.main {
+  margin: 2rem;
+}
 #choose {
   text-align: left;
 }
 #choice_bar {
   width: 40%;
+  display: inline-block;
+}
+
+#pic_des{
+  width: 50%;
+  display: inline-block;
+}
+
+table, td {
+  border: 1px solid #333;
+  text-align: center;
 }

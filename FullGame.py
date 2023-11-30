@@ -1,12 +1,37 @@
 import mysql.connector
+from flask import Flask
+from flask_cors import CORS
+import json
 
-connection = mysql.connector.connect(
+connection = mysql.connector.connect( # remember to change to your settings
          host='127.0.0.1',
          port= 3306,
          database='team12',
          user='root',
          password='riinaaal12345',
          autocommit=True)
+
+
+# Software 2
+
+app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
+# to send the data from DB to js, displaying plane information.
+# There's similar query/function below (show_and_choose_airplane()), but I coded anew to fit the display purpose better.
+@app.route('/plane/<type>')
+def get_plane_info(type):
+    sql = f'''SELECT type, size, capacity, co2_emission_per_km, max_range FROM airplane WHERE type = %s
+                '''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql, (type,))
+    result = cursor.fetchone()
+    return json.dumps(result)
+
+if __name__ == '__main__':
+    app.run(use_reloader = True, host= '127.0.0.1', port = 3000)
+    # check the host & port here
 
 
 # BACKEND functions start here ----------------

@@ -6,31 +6,138 @@
     <link href="/CSS/style.css" rel="stylesheet">
 </head>
 <body>
+
 <div class ="container" id="choose">
-    <h2 class="gray">Choose your plane!</h2>
+    <h2>Choose your plane!</h2>
+    <button id = "back" class = "button-19" role="button" onclick="location.href='main.html'">Back</button>
 </div>
+<div class="main">
 <div id ="choice_bar">
 <button id = "big" class = "button-19" onclick="change1()">Boeing 747</button>
 <button id = "medium" class = "button-19" onclick="change2()">Boeing 797</button>
 <button id = "small" class = "button-19" onclick="change3()">Private Jet</button>
 <button id = "helicopter" class = "button-19" onclick="change4()">Helicopter</button>
     </div>
-<img id = "placeholder" src = 'https://via.placeholder.com/210x295?text=planepic1' width="700px" height="550px">
+<div id ="pic_des">
+    <img id = "placeholder" src = 'https://via.placeholder.com/210x295?text=planepic1' width="500px" height="450px">
+    <table>
+  <thead>
+    <tr>
+      <th colspan="2">Plane type</th>
+    </tr>
+  </thead>
+  <tbody id="table">
+    <tr>
+      <td>Size</td>
+        <td>Capacity</td>
+        <td>Co2 Emission for Km</td>
+        <td>Maximum rage</td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+    </div>
 <footer><button id="destination" class = "button-19">Show the destination</button></footer>
 <script>
     'use strict';
+
     const img = document.getElementById('placeholder');
-    function change1(){
-      img.src = 'https://via.placeholder.com/210x295?text=planepic1'
+    async function change1(){
+
+        img.src = 'https://via.placeholder.com/210x295?text=planepic1';
+        const table = document.getElementById('table');
+        if (table.rows.length >1){
+          document.getElementById("table").deleteRow(1);
+        }
+
+        try{
+        const response = await fetch('http://127.0.0.1:3000/plane/boeing%20747');
+        const jsonData = await response.json();
+        //console.log(jsonData);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${jsonData.size}</td>
+                        <td>${jsonData.capacity}</td>
+                        <td>${jsonData.co2_emission_per_km}</td>
+                        <td>${jsonData.max_range}km</td>`;
+        table.appendChild(tr);
+
+      } catch (err){
+        console.log(err.message);
+      }
+
+
+
+
     }
-    function change2(){
-      img.src = 'https://via.placeholder.com/210x295?text=planepic2'
+    async function change2(){
+      img.src = 'https://via.placeholder.com/210x295?text=planepic2' //changing picture
+
+        const table = document.getElementById('table'); //to reset the table
+        if (table.rows.length >1){
+          document.getElementById("table").deleteRow(1);
+        }
+      try{
+        const response = await fetch('http://127.0.0.1:3000/plane/boeing%20797'); //fetching the data from db using Flask
+        const jsonData = await response.json();
+        //console.log(jsonData);
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${jsonData.size}</td>
+                        <td>${jsonData.capacity}</td>
+                        <td>${jsonData.co2_emission_per_km}</td>
+                        <td>${jsonData.max_range}km</td>`;
+        table.appendChild(tr);
+
+      } catch (err){
+        console.log(err.message);
+      }
     }
-    function change3(){
-      img.src = 'https://via.placeholder.com/210x295?text=planepic3'
+    async function change3(){
+      img.src = 'https://via.placeholder.com/210x295?text=planepic3';
+
+      const table = document.getElementById('table');
+        if (table.rows.length >1){
+          document.getElementById("table").deleteRow(1);
+        }
+      try{
+        const response = await fetch('http://127.0.0.1:3000/plane/private%20jet');
+        const jsonData = await response.json();
+        //console.log(jsonData);
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${jsonData.size}</td>
+                        <td>${jsonData.capacity}</td>
+                        <td>${jsonData.co2_emission_per_km}</td>
+                        <td>${jsonData.max_range}km</td>`;
+        table.appendChild(tr);
+
+      } catch (err){
+        console.log(err.message);
+      }
+
     }
-    function change4(){
-      img.src = 'https://via.placeholder.com/210x295?text=planepic4'
+    async function change4(){
+      img.src = 'https://via.placeholder.com/210x295?text=planepic4';
+
+      const table = document.getElementById('table');
+        if (table.rows.length >1){
+          document.getElementById("table").deleteRow(1);
+        }
+      try{
+        const response = await fetch('http://127.0.0.1:3000/plane/helicopter');
+        const jsonData = await response.json();
+        //console.log(jsonData);
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${jsonData.size}</td>
+                        <td>${jsonData.capacity}</td>
+                        <td>${jsonData.co2_emission_per_km}</td>
+                        <td>${jsonData.max_range}km</td>`;
+        table.appendChild(tr);
+
+      } catch (err){
+        console.log(err.message);
+      }
     }
 </script>
 </body>
