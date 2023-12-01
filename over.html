@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fly me, 'til you can!</title>
+    <img id="logo" src="/img/over.gif" alt="game_over">
+    <link href="/CSS/style.css" rel="stylesheet">
+</head>
+<body>
+<script>
+    'use strict';
+    function save(){
+      const save = confirm("Do you want to save your score?")
+        if (save){
+            //make it saved: to DB
+        const toScore = confirm("Do you want to check the scoreboard?")
+            if (toScore){
+            location.href="score.html"
+      } else {
+              location.href="index.html"
+            }
+    } else {
+          location.href="index.html"
+        }
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(save, 3000);
+    })
+
+</script>
+</body>
+</html>

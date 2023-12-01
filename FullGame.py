@@ -34,7 +34,7 @@ if __name__ == '__main__':
     # check the host & port here
 
 
-# BACKEND functions start here ----------------
+# BACKEND functions start here ---------------- from Software 1
 def get_airport_info(icao):
     sql = f'''SELECT iso_country, ident, name, latitude_deg, longitude_deg
                   FROM airport
