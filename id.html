@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fly me, 'til you can!</title>
+      <link href="/CSS/style.css" rel="stylesheet">
+</head>
+<body>
+<h2></h2>
+<div id ='intro'>
+<p>Hello, traveller!</p>
+<p>Before our journey begins,</p>
+<p>Tell me your name!</p>
+  </div>
+<form id ="form">
+  <input id ="name" type="text" name="name" placeholder="Type your name here!" autocomplete="on">
+  <input id="submit" type="submit">
+</form>
+<p id="another" style="color: #F21616"></p>
+<script>
+  'use strict';
+
+  const form = document.getElementById('form')
+  const submit = document.getElementById('submit');
+  form.addEventListener('submit',async (evt)=>{
+    evt.preventDefault();
+    const another = document.getElementById('another');
+    another.innerHTML = '';
+    const name = document.getElementById('name').value;
+
+    try {     //fetch player_id info from flask
+      const response = await fetch(`http://127.0.0.1:3000/player/${name}`);
+      const jsonData = await response.json();
+      //console.log(jsonData);
+      if (jsonData != null){    //If there is the same name, display 'name already exist. try another one!'
+        another.innerText = `Oh no, ${name} already exists. Try another one!`
+      } else {
+        location.href="main.html"
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+
+    //UNDONE ::Otherwise, get the name and create a new player_name and save it into DB.
+  })
+</script>
+
+
+</body>
+</html>
