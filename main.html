@@ -14,11 +14,7 @@
 <div class="main">
 <article class="card" id = "status">
 <h2 id="round"> ROUND *</h2>
-    <ul>
-        <li>player ID:</li>
-        <li>Current Location :</li>
-        <li>Remaining Co2 Budget:</li>
-        <li>Travelled Distance:</li>
+    <ul id ="list">
     </ul>
 </article>
 <img id = "placeholder" src = 'https://via.placeholder.com/210x295?text=map' width="800px" height="640px">
@@ -34,9 +30,28 @@
   const quit = confirm(`Are you sure you want to quit? All unsaved progress will be lost.`);
 
   if (quit){
-    return location.href ="index.html"
+    return location.href ="index.html";
   }
   }
+
+    window.addEventListener('load', async () => {
+    try {
+      const name = 'test_player' //placeholder
+      const response = await fetch(`http://127.0.0.1:3000/${name}`);
+      const jsonData = await response.json();
+      console.log(jsonData);
+
+        const text = `<li>player name: ${jsonData.player_name}</li>
+        <li>Current Location : ${jsonData.current_location}</li>
+        <li>Remaining Co2 Budget: ${jsonData.co2_budget - jsonData.co2_consumed}</li>
+        <li>Travelled Distance: ${jsonData.total_travelled}</li>`
+  const list = document.getElementById('list');
+  list.innerHTML = text;
+    } catch (err){
+      console.log(err.message);
+    }})
+
+
 </script>
 </body>
 </html>
