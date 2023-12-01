@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fly me, 'til you can!</title>
+      <link href="/CSS/style.css" rel="stylesheet">
+</head>
+<body>
+
+<div class ="container">
+    <h2>Choose your destination!</h2>
+    <button id = "back" class = "button-19" role="button">Back</button>
+    </div>
+<div class="main">
+<article class="card" id = "status">
+<h2 id="round"> Airport info</h2>
+    <ul>
+        <li>Airport name:</li>
+        <li>Location :</li>
+        <li>Expected Co2 Consumption:</li>
+        <li>Distance from your location:</li>
+    </ul>
+</article>
+<img id = "placeholder" src = 'https://via.placeholder.com/210x295?text=map' width="800px" height="640px">
+</div>
+
+<footer>
+<button id = "start" class = "button-19" role="button" onclick="location.href='event.html'">Let's fly!</button>
+</footer>
+<script>
+  'use strict';
+  const back = document.getElementById('back');
+  back.addEventListener('click',(evt)=>{
+    confirm(`Are you sure you want to go back to choosing the airplane?
+    You'll lose one of your turns to make a change.
+
+    Your remaining chance(s): `)
+    if (back){
+      back.onclick= location.href='choice.html'
+    }
+  })
+</script>

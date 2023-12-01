@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fly me, 'til you can!</title>
+    <link href="/CSS/style.css" rel="stylesheet">
+</head>
+<body>
+<div class="cloud cloud1">
+  <div class="light"></div>
+<img  src="https://images.vexels.com/media/users/3/145795/isolated/preview/05cd33059a006bf49006097af4ccba98-plane-in-flight-by-vexels.png" /></div>
+<script>
+    'use strict';
+    function evtTimeout() {
+      alert("Event occurrence: If it happens. If not, this alert should not be displayed. After this page was loaded 3s.");
+        }
+
+    function resTimeout() {
+      alert("The final result of the travel. Display CO2 consumption, traveled distance, new location. Then redirect.");
+    }
+    function redirect(){
+      location.href="main.html"
+}
+
+window.addEventListener('load', () => {
+  setTimeout(evtTimeout, 4000);
+  setTimeout(resTimeout, 9000);
+  setTimeout(redirect, 9000);
+});
+
+</script>
+</body>
+</html>
