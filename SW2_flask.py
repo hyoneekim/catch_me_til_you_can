@@ -5,12 +5,12 @@ import json
 
 # check your setting
 connection = mysql.connector.connect(
-    host = '127.0.0.1',
-    port = 3306,
-    database = 'flight_game_team12_mysql',
-    user = 'root',
-    password = 'hyonee',
-    autocommit = True
+    host='127.0.0.1',
+    port=3306,
+    database='flight_game_team12_mysql',
+    user='root',
+    password='riinaaal',
+    autocommit=True
 )
 
 app = Flask(__name__)
@@ -45,6 +45,21 @@ def get_plane_info(type):
     cursor.execute(sql, (type,))
     result = cursor.fetchone()
     return json.dumps(result)
+
+
+# Create new player in database with same player_name as used before for re-try
+@app.route('/re_try/<name>')
+def re_try(name):
+    co2_budget = 5000000
+    co2_consumed = 0
+    total_travelled = 0
+    sql = f'''INSERT INTO player(player_name,co2_budget,co2_consumed,total_travelled)VALUES (%s,%s,%s,%s)'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql, (name, co2_budget, co2_consumed,total_travelled))
+    cursor.fetchall()
+    result = {"Result": "Re-try player created"}
+    return json.dumps(result)
+
 
 # check the host & port here
 if __name__ == '__main__':
