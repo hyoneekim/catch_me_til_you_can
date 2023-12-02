@@ -47,21 +47,20 @@ def get_plane_info(type):
     return json.dumps(result)
 
 
-# Create new player in database with same player_name as used before for re-try
+# Reset player info, based on player_name
 @app.route('/re_try/<name>')
 def re_try(name):
     co2_budget = 5000000
     co2_consumed = 0
     total_travelled = 0
-    sql = f'''INSERT INTO player(player_name,co2_budget,co2_consumed,total_travelled)VALUES (%s,%s,%s,%s)'''
+    sql = f'''UPDATE player SET co2_budget="{co2_budget}", co2_consumed="{co2_consumed}", total_travelled ="{total_travelled}" WHERE player_name ="{name}"'''
     cursor = connection.cursor(dictionary=True)
-    cursor.execute(sql, (name, co2_budget, co2_consumed,total_travelled))
+    cursor.execute(sql)
     cursor.fetchall()
-    result = {"Result": "Re-try player created"}
-    return json.dumps(result)
+    return json.dumps({'Result': 'Updated'})
 
 
 # check the host & port here
 if __name__ == '__main__':
-    app.run(use_reloader = True, host= '127.0.0.1', port = 3000)
+    app.run(use_reloader=True, host='127.0.0.1', port=3000)
 
