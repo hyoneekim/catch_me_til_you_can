@@ -7,8 +7,8 @@
 </head>
 <body>
 <div class ="container">
-    <h2>Choose your destination!</h2>
-    <button id = "back" class = "button-19" role="button">Back</button>
+    <h2>Your journey is about to begin!</h2>
+    <button id = "back" class = "button-19" role="button" onclick="location.href='index.html'">Back</button>
     </div>
 <div class="main">
 <div id ='intro'>
@@ -23,33 +23,53 @@
 <p id="another"></p>
 </div>
 <footer>
-<button id = "next" class = "button-19" role="button" onclick="location.href='main.html'">next</button>
+<button id = "next" class = "button-19" role="button" onclick="check()">next</button>
 </footer>
 <script>
   'use strict';
+'use strict';
 
-  const form = document.getElementById('form')
-  const submit = document.getElementById('submit');
-  form.addEventListener('submit',async (evt)=>{
-    evt.preventDefault();
-    const another = document.getElementById('another');
-    another.innerHTML = '';
-    const name = document.getElementById('name').value;
+let idSelected = false;
 
-    try {     //fetch player_id info from flask
-      const response = await fetch(`http://127.0.0.1:3000/player/${name}`);
-      const jsonData = await response.json();
-      //console.log(jsonData);
-      if (jsonData != null){    //If there is the same name, display 'name already exist. try another one!'
-        another.style= "color: #F21616"
-        another.innerText = `Oh no, ${name} already exists. Try another one!`
-      } else {
-        another.style= "color: black"
-        another.innerText = `You can use the name ${name}. Great start! `
-      }
-    } catch (err) {
-      console.log(err.message);
+function check() {
+  const next = document.getElementById('next');
+  next.disabled = !idSelected;
+
+  if (idSelected) {
+    next.addEventListener('click', () => {
+      location.href = 'main.html';
+    });
+  }
+}
+
+const form = document.getElementById('form');
+const submit = document.getElementById('submit');
+
+form.addEventListener('submit', async (evt) => {
+  evt.preventDefault();
+  const another = document.getElementById('another');
+  another.innerHTML = '';
+  const name = document.getElementById('name').value;
+
+  try {
+    const response = await fetch(`http://127.0.0.1:3000/player/${name}`);
+    const jsonData = await response.json();
+
+    if (jsonData !== null) {
+      another.style.color = '#F21616';
+      another.innerText = `Oh no, ${name} already exists. Try another one!`;
+      idSelected = false;
+    } else {
+      another.style.color = 'black';
+      another.innerText = `You can use the name ${name}. Great start! Click the 'NEXT' button below.`;
+      idSelected = true;
     }
+    check(); // Activate/deactivate the 'next' button based on idSelected
+  } catch (err) {
+    console.log(err.message);
+  }
+
+
 
     //UNDONE ::Otherwise, get the name and create a new player_name and save it into DB.
   })
