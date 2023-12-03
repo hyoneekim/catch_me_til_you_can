@@ -183,8 +183,9 @@ footer {
 }
 
 table {
-  width: 80%;
+  width: 90%;
   border: 1px solid #333;
+  table-layout: fixed;
   text-align: center;
 }
 
