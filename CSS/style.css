@@ -183,7 +183,13 @@ footer {
   display: inline-block;
 }
 
-table, td {
+table {
+  width: 80%;
+  border: 1px solid #333;
+  text-align: center;
+}
+
+td {
   border: 1px solid #333;
   text-align: center;
 }
