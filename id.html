@@ -6,7 +6,11 @@
       <link href="/CSS/style.css" rel="stylesheet">
 </head>
 <body>
-<h2></h2>
+<div class ="container">
+    <h2>Choose your destination!</h2>
+    <button id = "back" class = "button-19" role="button">Back</button>
+    </div>
+<div class="main">
 <div id ='intro'>
 <p>Hello, traveller!</p>
 <p>Before our journey begins,</p>
@@ -16,7 +20,11 @@
   <input id ="name" type="text" name="name" placeholder="Type your name here!" autocomplete="on">
   <input id="submit" type="submit">
 </form>
-<p id="another" style="color: #F21616"></p>
+<p id="another"></p>
+</div>
+<footer>
+<button id = "next" class = "button-19" role="button" onclick="location.href='main.html'">next</button>
+</footer>
 <script>
   'use strict';
 
@@ -33,9 +41,11 @@
       const jsonData = await response.json();
       //console.log(jsonData);
       if (jsonData != null){    //If there is the same name, display 'name already exist. try another one!'
+        another.style= "color: #F21616"
         another.innerText = `Oh no, ${name} already exists. Try another one!`
       } else {
-        location.href="main.html"
+        another.style= "color: black"
+        another.innerText = `You can use the name ${name}. Great start! `
       }
     } catch (err) {
       console.log(err.message);
