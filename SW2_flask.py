@@ -5,12 +5,12 @@ import json
 
 # check your setting
 connection = mysql.connector.connect(
-    host = '127.0.0.1',
-    port = 3306,
-    database = 'flight_game_team12_mysql',
-    user = 'root',
-    password = 'hyonee',
-    autocommit = True
+    host='127.0.0.1',
+    port=3306,
+    database='flight_game_team12_mysql',
+    user='root',
+    password='riinaaal',
+    autocommit=True
 )
 
 app = Flask(__name__)
@@ -46,7 +46,21 @@ def get_plane_info(type):
     result = cursor.fetchone()
     return json.dumps(result)
 
+
+# Reset player info, based on player_name
+@app.route('/re_try/<name>')
+def re_try(name):
+    co2_budget = 5000000
+    co2_consumed = 0
+    total_travelled = 0
+    sql = f'''UPDATE player SET co2_budget="{co2_budget}", co2_consumed="{co2_consumed}", total_travelled ="{total_travelled}" WHERE player_name ="{name}"'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql)
+    cursor.fetchall()
+    return json.dumps({'Result': 'Updated'})
+
+
 # check the host & port here
 if __name__ == '__main__':
-    app.run(use_reloader = True, host= '127.0.0.1', port = 3000)
+    app.run(use_reloader=True, host='127.0.0.1', port=3000)
 

@@ -8,32 +8,41 @@
 </head>
 <body>
 <container class="btns">
-    <button id = "main" class = "button-19" onclick="location.href='index.html'">Back to front page</button>
-    <button id = "score" class = "button-19" onclick="location.href='score.html'">Check score board</button>
-    <button id = "retry" class = "button-19" onclick="retry()">I want to re-try!</button>
+    <button id="main" class="button-19" onclick="location.href='index.html'">Back to front page</button>
+    <button id="score" class="button-19" onclick="location.href='score.html'">Check score board</button>
+    <button id="retry" class="button-19" onclick="retry()">I want to re-try!</button>
 </container>
 <script>
-    'use strict';
-    function wantSave(){
-      const save = confirm("Do you want to save your score?")
-        if (save){
-            //make it saved: to DB
-          alert('Your score has been saved to the score board!')
-    }}
+  'use strict';
 
+  function wantSave() {
+    const save = confirm('Do you want to save your score?');
+    if (save) {
+      //make it saved: to DB
+      alert('Your score has been saved to the score board!');
+    }
+  }
 
-    window.addEventListener('load', () => {
-      setTimeout(wantSave, 3000);
-    })
+  window.addEventListener('load', () => {
+    setTimeout(wantSave, 3000);
+  });
 
-    function retry (){
+  async function retry() {
     const cond = confirm('You can re-try the game with your current player ID! Do you want it?');
-        if (cond){
-          //make the player re-try with the current player_name, but default setting again
+    if (cond) {
+      //make the player re-try with the current player_name, but default setting again
+        try {
+          const name = 'test_player'; //placeholder
+          const response = await fetch(`http://127.0.0.1:3000/re_try/${name}`);
+          const jsonData = await response.json();
+          console.log(jsonData);
           // then redirect to the main.html
-          location.href='main.html';
+          location.href = 'main.html';
+        } catch (err) {
+          console.log(err.message);
         }
-        }
+      }
+    }
 </script>
 </body>
 </html>
