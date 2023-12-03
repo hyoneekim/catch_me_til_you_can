@@ -178,12 +178,16 @@ footer {
 }
 
 #pic_des{
-  width: 50%;
+  width: 55%;
   display: inline-block;
+  text-align: center;
+}
+#plane_pic{
+  width: 75%;
 }
 
 table {
-  width: 90%;
+  width: 100%;
   border: 1px solid #333;
   table-layout: fixed;
   text-align: center;
@@ -226,4 +230,12 @@ th {
 @keyframes cloud {
   from {right:-500px;}
   to {right: 102%;}
+}
+
+/* score.html */
+#scoreboard {
+  margin: 3rem;
+  padding: 2rem;
+  text-align: center;
+
 }
