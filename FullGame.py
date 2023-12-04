@@ -1,6 +1,5 @@
 import mysql.connector
-import geopy
-from api_handler.api_handler import get_distance
+
 connection = mysql.connector.connect(
          host='127.0.0.1',
          port= 3306,
