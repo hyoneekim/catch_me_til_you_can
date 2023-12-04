@@ -202,6 +202,30 @@ th {
   text-align: left;
 }
 
+/* choice_des.html */
+
+#des_map{
+  display: inline-block;
+  float: right;
+  width: 60%;
+}
+#map_ph{
+  width: 90%;
+}
+#choice_des{
+  margin-top: 2rem;
+  display: inline-block;
+  float: left;
+  width: 40%;
+  text-align: left;
+}
+#des1, #des2, #des3, #des4, #des5 {
+  width: 40%;
+  display: inline-block;
+}
+
+
+
 /* event page animation */
 
 .light {

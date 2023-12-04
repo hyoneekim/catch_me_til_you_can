@@ -24,14 +24,15 @@
   }
 
   window.addEventListener('load', () => {
-    setTimeout(wantSave, 3000);
+    setTimeout(wantSave, 1000);
   });
 
   async function retry() {
     const cond = confirm('You can re-try the game with your current player ID! Do you want it?');
     if (cond) {
+    }
       //make the player re-try with the current player_name, but default setting again
-        try {
+try {
           const name = 'test_player'; //placeholder
           const response = await fetch(`http://127.0.0.1:3000/re_try/${name}`);
           const jsonData = await response.json();
@@ -41,7 +42,7 @@
         } catch (err) {
           console.log(err.message);
         }
-      }
+
     }
 </script>
 </body>
