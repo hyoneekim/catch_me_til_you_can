@@ -1,17 +1,16 @@
 import mysql.connector
-
-connection = mysql.connector.connect( # remember to change to your settings
+import geopy
+from api_handler.api_handler import get_distance
+connection = mysql.connector.connect(
          host='127.0.0.1',
          port= 3306,
          database='team12',
          user='root',
-         password='riinaaal12345',
+         password='xenun333',
          autocommit=True)
 
 
-
-
-# BACKEND functions start here ---------------- from Software 1
+# BACKEND functions start here ----------------
 def get_airport_info(icao):
     sql = f'''SELECT iso_country, ident, name, latitude_deg, longitude_deg
                   FROM airport
