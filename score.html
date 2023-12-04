@@ -13,7 +13,7 @@
       <th colspan="2">Score Board</th>
     </tr>
   </thead>
-  <tbody class="gray">
+  <tbody id="score">
     <tr>
       <td>Player ID</td>
       <td>Score</td>
@@ -23,6 +23,28 @@
 
 <button class = "button-19" role="button" onclick="location.href='index.html'"> Back </button>
 </div>
+<script>
+  'use strict';
+  const score = document.getElementById('score')
+      async function show_score(){
+
+        try{
+        const response = await fetch('http://127.0.0.1:3000/score');
+        const jsonData = await response.json();
+        console.log(jsonData);
+
+        for (let i=0;i<jsonData.length;i++){
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${jsonData[i][1]}</td>
+                        <td>${jsonData[i][2]}</td>`
+        score.appendChild(tr)};
+
+
+        } catch (err){
+        console.log(err.message);
+      }}
+  show_score();
+</script>
 </body>
 </html>
 

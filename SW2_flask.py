@@ -17,6 +17,15 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+#display score board -Su
+@app.route('/score')
+def get_score():
+    sql = "SELECT * FROM scoreboard ORDER BY score DESC LIMIT 50"
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    return json.dumps(result)
+
 # Sending all data of the player (if found multiple names by re-try, only the highest id will show.)
 @app.route('/<name>')
 def get_player_info(name):
