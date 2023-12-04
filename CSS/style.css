@@ -138,10 +138,12 @@ article h2 {
   margin: 0;
   text-align: center;
   padding: 0 0 0.5rem 0;
+
 }
 
 #status {
   float: left;
+  width: 35%;
 }
 
 #status ul li {
