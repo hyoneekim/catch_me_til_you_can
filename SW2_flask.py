@@ -73,6 +73,15 @@ def get_plane_info(type):
     return json.dumps(result)
 
 
+@app.route('/choose/<plane>')
+def enter_choice(plane):
+    sql = f'''UPDATE choice SET plane_type = "{plane}" WHERE player_name = (SELECT player_name FROM player WHERE id = (SELECT MAX(id) FROM player))'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql)
+    cursor.fetchall()
+    return json.dumps({'Info': 'Updated'})
+
+
 # Reset player info, based on player_name - Riina
 @app.route('/re_try/<name>')
 def re_try(name):
