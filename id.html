@@ -2,80 +2,84 @@
 <html lang="en">
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Advent+Pro&family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Advent+Pro&family=Open+Sans&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <title>Fly me, 'til you can!</title>
-      <link href="/CSS/style.css" rel="stylesheet">
+    <link href="/CSS/style.css" rel="stylesheet">
 </head>
 <body>
-<div class ="container">
+<div class="container">
     <h2>Your journey is about to begin!</h2>
-    <button id = "back" class = "button-19" role="button" onclick="location.href='index.html'">Back</button>
-    </div>
+    <button id="back" class="button-19" role="button" onclick="location.href='index.html'">Back</button>
+</div>
 <div class="main">
-<div id ='intro'>
-<p>Hello, traveller!</p>
-<p>Before our journey begins,</p>
-<p>Tell me your name!</p>
-  </div>
-<form id ="form">
-  <input id ="name" type="text" name="name" placeholder="Type your name here!" autocomplete="on">
-  <input id="submit" type="submit">
-</form>
-<p id="another"></p>
+    <div id='intro'>
+        <p>Hello, traveller!</p>
+        <p>Before our journey begins,</p>
+        <p>Tell me your name!</p>
+    </div>
+    <form id="form">
+        <input id="name" type="text" name="name" placeholder="Type your name here!" autocomplete="on">
+        <input id="submit" type="submit">
+    </form>
+    <p id="another"></p>
 </div>
 <footer>
-<button id = "next" class = "button-19" role="button" onclick="check()">next</button>
+    <button id="next" class="button-19" role="button" onclick="check()">next</button>
 </footer>
 <script>
   'use strict';
-'use strict';
 
-let idSelected = false;
+  let idSelected = false;
 
-function check() {
-  const next = document.getElementById('next');
-  next.disabled = !idSelected;
+  function check() {
+    const next = document.getElementById('next');
+    next.disabled = !idSelected;
 
-  if (idSelected) {
-    next.addEventListener('click', () => {
-      location.href = 'main.html';
-    });
-  }
-}
-
-const form = document.getElementById('form');
-const submit = document.getElementById('submit');
-
-form.addEventListener('submit', async (evt) => {
-  evt.preventDefault();
-  const another = document.getElementById('another');
-  another.innerHTML = '';
-  const name = document.getElementById('name').value;
-
-  try {
-    const response = await fetch(`http://127.0.0.1:3000/player/${name}`);
-    const jsonData = await response.json();
-
-    if (jsonData !== null) {
-      another.style.color = '#F21616';
-      another.innerText = `Oh no, ${name} already exists. Try another one!`;
-      idSelected = false;
-    } else {
-      another.style.color = 'black';
-      another.innerText = `You can use the name ${name}. Great start! Click the 'NEXT' button below.`;
-      idSelected = true;
+    if (idSelected) {
+      next.addEventListener('click', async () => {
+        const name = document.getElementById('name').value;
+        try {
+          const response = await fetch(`http://127.0.0.1:3000/create/${name}`);
+          const jsonData = await response.json();
+          console.log(jsonData);
+        } catch (err) {
+          console.log(err.message);
+        }
+        location.href = 'main.html';
+      });
     }
-    check(); // Activate/deactivate the 'next' button based on idSelected
-  } catch (err) {
-    console.log(err.message);
   }
 
+  const form = document.getElementById('form');
+  const submit = document.getElementById('submit');
 
+  form.addEventListener('submit', async (evt) => {
+    evt.preventDefault();
+    const another = document.getElementById('another');
+    another.innerHTML = '';
+    const name = document.getElementById('name').value;
 
-    //UNDONE ::Otherwise, get the name and create a new player_name and save it into DB.
-  })
+    try {
+      const response = await fetch(`http://127.0.0.1:3000/player/${name}`);
+      const jsonData = await response.json();
+
+      if (jsonData !== null) {
+        another.style.color = '#F21616';
+        another.innerText = `Oh no, ${name} already exists. Try another one!`;
+        idSelected = false;
+      } else {
+        another.style.color = 'black';
+        another.innerText = `You can use the name ${name}. Great start! Click the 'NEXT' button below.`;
+        idSelected = true;
+      }
+      check(); // Activate/deactivate the 'next' button based on idSelected
+    } catch (err) {
+      console.log(err.message);
+    }
+
+  });
 </script>
 
 
