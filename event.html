@@ -41,6 +41,20 @@
 
         const pick = weightedRandom(weights, jsonData);
         console.log(pick);
+        // Sending pick back to Flask
+        const dataToSend = { pick };
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataToSend)
+        };
+
+        // Adjust the URL '/send_pick' to match your Flask route
+        const sendPickResponse = await fetch('http://127.0.0.1:3000/result', requestOptions);
+        const sendPickData = await sendPickResponse.json();
+        console.log(sendPickData);
 
         const msg = pick[1];
        setTimeout(() => {
