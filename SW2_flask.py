@@ -17,6 +17,57 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+# sending the result data back to JS to display the info -su
+@app.route('/result/<turn>/<userid>')
+def get_result(turn, userid):
+    # placeholder user id and turn
+    sql = f'''SELECT distance_km, co2_spent from choice WHERE turn ={turn} AND player_name = "{userid}"'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql)
+    result = cursor.fetchone()
+    return json.dumps(result)
+
+
+# fetching event occurrence data from JS & updating DB -Su
+@app.route('/result', methods=['post'])
+def receive_pick():
+    data = request.json
+    received_pick = data.get('pick')
+
+    #placeholder user id and turn
+    turn = 1
+    userid = 'su'
+
+    if received_pick[2] == 'NULL':
+        sql = f"UPDATE choice SET event_occurred = {received_pick[0]} WHERE turn = {turn} AND player_name = '{userid}'"
+        cursor = connection.cursor()
+        cursor.execute(sql)
+
+    else:
+
+        if received_pick[2] == 'neg':
+            sql2 = f"UPDATE choice SET event_occurred = {received_pick[0]}, co2_spent = co2_spent + co2_spent * {received_pick[4]} WHERE turn = {turn} AND player_name = '{userid}'"
+            cursor = connection.cursor()
+            cursor.execute(sql2)
+
+        elif received_pick[2] == 'pos':
+            sql3 = f"UPDATE choice SET event_occurred = {received_pick[0]}, co2_spent = co2_spent - co2_spent * {received_pick[4]} WHERE turn = {turn} AND player_name = '{userid}'"
+            cursor = connection.cursor()
+            cursor.execute(sql3)
+
+
+    return json.dumps({'Result': 'Updated'})
+
+
+#fetch event data -Su
+@app.route('/event')
+def get_event():
+    sql = f"SELECT * from event"
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    return json.dumps(result)
+
 
 # display score board -Su
 @app.route('/score')
