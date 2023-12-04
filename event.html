@@ -12,20 +12,18 @@
 <script>
     'use strict';
 
-        async function show_event(){
-
-        try{
+async function show_event() {
+    try {
         const response = await fetch('http://127.0.0.1:3000/event');
         const jsonData = await response.json();
         console.log(jsonData);
 
-          let weights = []
-            for (let evt of jsonData){
-        weights.push(evt[3]*100);
-            }
-            //console.log(weights);
-            //console.log(events);
-            function weightedRandom(weights, events) {
+        let weights = []
+        for (let evt of jsonData) {
+            weights.push(evt[3] * 100);
+        }
+
+        function weightedRandom(weights, events) {
             const total = weights.reduce((acc, val) => acc + val, 0);
             const random = Math.random() * total;
             let sum = 0;
@@ -37,10 +35,11 @@
                 }
             }
             return events[events.length - 1]; // fallback if no event is selected
-}
+        }
 
         const pick = weightedRandom(weights, jsonData);
         console.log(pick);
+
         // Sending pick back to Flask
         const dataToSend = { pick };
         const requestOptions = {
@@ -51,39 +50,63 @@
             body: JSON.stringify(dataToSend)
         };
 
-        // Adjust the URL '/send_pick' to match your Flask route
         const sendPickResponse = await fetch('http://127.0.0.1:3000/result', requestOptions);
         const sendPickData = await sendPickResponse.json();
         console.log(sendPickData);
 
         const msg = pick[1];
-       setTimeout(() => {
-            alert(`You've got a message from control tower!
-
-       "${msg}"`);
-        }, 4000);
-
+        if (pick[2] == 'neg') {
+            setTimeout(() => {
+                alert(`You've got a message from control tower!\n\n"${msg}"\nCo2 consumption is ${pick[4] * 100}% increased!`);
+                show_result();
+            }, 3000);
+        } else if (pick[2] == 'pos') {
+            setTimeout(() => {
+                alert(`You've got a message from control tower!\n\n"${msg}"\nCo2 consumption is ${pick[4] * 100}% decreased!`);
+                show_result();
+            }, 3000);
+        } else {
+            setTimeout(() => {
+                show_result();
+            }, 3000);
+        }
     } catch (err) {
         console.log(err.message);
     }
 }
 
+async function show_result() {
+    // Placeholder
+    const turn = 1;
+    const userid = 'su';
 
-    function resTimeout() {
-      alert("The final result of the travel. Display CO2 consumption, traveled distance, new location. Then redirect.");
+    try {
+        const response = await fetch(`http://127.0.0.1:3000/result/${turn}/${userid}`);
+        const jsonData = await response.json();
+        console.log(jsonData);
+
+        setTimeout(() => {
+            alert(`The result of your travel this round:
+
+            Travelled distance : ${jsonData.distance_km},
+            Spent Co2 : ${jsonData.co2_spent}`)
+        }, 3000);
+
+    } catch (err) {
+        console.log(err.message)
     }
-    function redirect(){
-      location.href="main.html"
+}
+
+function redirect() {
+    location.href = "main.html"
 }
 
 window.addEventListener('load', () => {
-  setTimeout(resTimeout, 9000);
-  setTimeout(redirect, 9000);
+    setTimeout(redirect, 9000);
 });
 
+show_event();
 
-
-    show_event();
 </script>
 </body>
 </html>
