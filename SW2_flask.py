@@ -17,59 +17,8 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-# sending the result data back to JS to display the info -su
-@app.route('/result/<turn>/<userid>')
-def get_result(turn, userid):
-    # placeholder user id and turn
-    sql = f'''SELECT distance_km, co2_spent from choice WHERE turn ={turn} AND player_name = "{userid}"'''
-    cursor = connection.cursor(dictionary=True)
-    cursor.execute(sql)
-    result = cursor.fetchone()
-    return json.dumps(result)
 
-
-# fetching event occurrence data from JS & updating DB -Su
-@app.route('/result', methods=['post'])
-def receive_pick():
-    data = request.json
-    received_pick = data.get('pick')
-
-    #placeholder user id and turn
-    turn = 1
-    userid = 'su'
-
-    if received_pick[2] == 'NULL':
-        sql = f"UPDATE choice SET event_occurred = {received_pick[0]} WHERE turn = {turn} AND player_name = '{userid}'"
-        cursor = connection.cursor()
-        cursor.execute(sql)
-
-    else:
-
-        if received_pick[2] == 'neg':
-            sql2 = f"UPDATE choice SET event_occurred = {received_pick[0]}, co2_spent = co2_spent + co2_spent * {received_pick[4]} WHERE turn = {turn} AND player_name = '{userid}'"
-            cursor = connection.cursor()
-            cursor.execute(sql2)
-
-        elif received_pick[2] == 'pos':
-            sql3 = f"UPDATE choice SET event_occurred = {received_pick[0]}, co2_spent = co2_spent - co2_spent * {received_pick[4]} WHERE turn = {turn} AND player_name = '{userid}'"
-            cursor = connection.cursor()
-            cursor.execute(sql3)
-
-
-    return json.dumps({'Result': 'Updated'})
-
-
-#fetch event data -Su
-@app.route('/event')
-def get_event():
-    sql = f"SELECT * from event"
-    cursor = connection.cursor()
-    cursor.execute(sql)
-    result = cursor.fetchall()
-    return json.dumps(result)
-
-
-#display score board -Su
+# display score board -Su
 @app.route('/score')
 def get_score():
     sql = "SELECT * FROM scoreboard ORDER BY score DESC LIMIT 50"
@@ -77,6 +26,7 @@ def get_score():
     cursor.execute(sql)
     result = cursor.fetchall()
     return json.dumps(result)
+
 
 # Sending all data of the player (if found multiple names by re-try, only the highest id will show.)
 @app.route('/<name>')
@@ -87,6 +37,7 @@ def get_player_info(name):
     result = cursor.fetchone()
     return json.dumps(result)
 
+
 # finding existing player_name -Su
 @app.route('/player/<name>')
 def get_player_name(name):
@@ -95,6 +46,20 @@ def get_player_name(name):
     cursor.execute(sql, (name,))
     result = cursor.fetchone()
     return json.dumps(result)
+
+
+# Creating a player based on name - Riina
+@app.route('/create/<name>')
+def create_name(name):
+    co2_budget = 5000000
+    co2_consumed = 0
+    total_travelled = 0
+    sql = f'''INSERT INTO player(player_name,co2_budget,co2_consumed,total_travelled)VALUES (%s,%s,%s,%s)'''
+    cursor = connection.cursor(dictionary=True)
+    val = (name, co2_budget, co2_consumed, total_travelled)
+    cursor.execute(sql, val)
+    cursor.fetchall()
+    return {'Player': 'Created'}
 
 
 # display plane types and info -Su
@@ -108,7 +73,16 @@ def get_plane_info(type):
     return json.dumps(result)
 
 
-# Reset player info, based on player_name
+@app.route('/choose/<plane>')
+def enter_choice(plane):
+    sql = f'''UPDATE choice SET plane_type = "{plane}" WHERE player_name = (SELECT player_name FROM player WHERE id = (SELECT MAX(id) FROM player))'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql)
+    cursor.fetchall()
+    return json.dumps({'Info': 'Updated'})
+
+
+# Reset player info, based on player_name - Riina
 @app.route('/re_try/<name>')
 def re_try(name):
     co2_budget = 5000000
