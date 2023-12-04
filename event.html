@@ -11,9 +11,49 @@
 <img  src="https://images.vexels.com/media/users/3/145795/isolated/preview/05cd33059a006bf49006097af4ccba98-plane-in-flight-by-vexels.png" /></div>
 <script>
     'use strict';
-    function evtTimeout() {
-      alert("Event occurrence: If it happens. If not, this alert should not be displayed. After this page was loaded 3s.");
-        }
+
+        async function show_event(){
+
+        try{
+        const response = await fetch('http://127.0.0.1:3000/event');
+        const jsonData = await response.json();
+        console.log(jsonData);
+
+          let weights = []
+            for (let evt of jsonData){
+        weights.push(evt[3]*100);
+            }
+            //console.log(weights);
+            //console.log(events);
+            function weightedRandom(weights, events) {
+            const total = weights.reduce((acc, val) => acc + val, 0);
+            const random = Math.random() * total;
+            let sum = 0;
+
+            for (let i = 0; i < weights.length; i++) {
+                sum += weights[i];
+                if (random < sum) {
+                    return events[i];
+                }
+            }
+            return events[events.length - 1]; // fallback if no event is selected
+}
+
+        const pick = weightedRandom(weights, jsonData);
+        console.log(pick);
+
+        const msg = pick[1];
+       setTimeout(() => {
+            alert(`You've got a message from control tower!
+
+       "${msg}"`);
+        }, 4000);
+
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+
 
     function resTimeout() {
       alert("The final result of the travel. Display CO2 consumption, traveled distance, new location. Then redirect.");
@@ -23,11 +63,13 @@
 }
 
 window.addEventListener('load', () => {
-  setTimeout(evtTimeout, 4000);
   setTimeout(resTimeout, 9000);
   setTimeout(redirect, 9000);
 });
 
+
+
+    show_event();
 </script>
 </body>
 </html>
