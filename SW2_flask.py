@@ -16,6 +16,30 @@ connection = mysql.connector.connect(
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
+@app.route('/destination/<size>')
+def get_destination(size):
+    sql = f'''SELECT ident, latitude_deg, longitude_deg, airport.name, airport.continent, country.name as country, airplane.max_range, airplane.co2_emission_per_km, airplane.capacity
+                FROM airport 
+                INNER JOIN airplane on (airplane.size = airport.type)
+                INNER JOIN country on (airport.iso_country = country.iso_country)
+                WHERE airport.type = '{size}' ORDER BY RAND () LIMIT 5'''
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    return json.dumps(result)
+
+@app.route('/current/<userid>') # getting current icao code the lat & lon info of the airport
+def get_current(userid):
+    sql = f'''SELECT p.current_location, a.latitude_deg, a.longitude_deg, co2_budget, co2_consumed
+FROM player p
+JOIN airport a ON p.current_location = a.ident
+WHERE p.player_name = "{userid}"
+'''
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    result = cursor.fetchone()
+    return json.dumps(result)
+
 
 
 # sending the result data back to JS to display the info -su
