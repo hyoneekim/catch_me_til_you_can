@@ -121,16 +121,21 @@ function des1() {
   const info = document.getElementById('info');
 
   const li1 = document.createElement('li');
-  li1.textContent = `Airport name: ${desArr[0][0]}`;
+   const li2 = document.createElement('li');
+    const li3 = document.createElement('li');
+     const li4 = document.createElement('li');
 
-  const li2 = document.createElement('li');
-  li2.textContent = `Location : ${desArr[0][1]}, ${desArr[0][2]}`;
-
-  const li3 = document.createElement('li');
-  li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[0][0])} g`;
-
-  const li4 = document.createElement('li');
-  li4.textContent = `Distance from your location:${Math.floor(calArr[0][1])} km` ;
+  try {
+    li1.textContent = `Airport name: ${desArr[0][0]}`;
+    li2.textContent = `Location: ${desArr[0][1]}, ${desArr[0][2]}`;
+    li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[0][0])} g`;
+    li4.textContent = `Distance from your location: ${Math.floor(calArr[0][1])} km`;
+  } catch (error) {
+    console.error(error);
+    // Set the info panel to display "Destination unavailable"
+    info.innerHTML = '<li>Destination unavailable</li>';
+    return;
+  }
 
   info.innerHTML = ''; // Clear existing content
   info.appendChild(li1);
@@ -141,20 +146,23 @@ function des1() {
 function des2() {
     const info = document.getElementById('info');
 
-    const li1 = document.createElement('li');
-    li1.textContent = `Airport name: ${desArr[1][0]}`;
-
-    const li2 = document.createElement('li');
-    li2.textContent = `Location : ${desArr[1][1]}, ${desArr[1][2]}`;
-
+   const li1 = document.createElement('li');
+   const li2 = document.createElement('li');
     const li3 = document.createElement('li');
-  li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[1][0])} g`;
+     const li4 = document.createElement('li');
 
-  //if the destination is not available, err handling (eg. show no destination on the display!)
+  try {
+    li1.textContent = `Airport name: ${desArr[1][0]}`;
+    li2.textContent = `Location: ${desArr[1][1]}, ${desArr[1][2]}`;
+    li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[1][0])} g`;
+    li4.textContent = `Distance from your location: ${Math.floor(calArr[1][1])} km`;
+  } catch (error) {
+    console.error(error);
 
-  const li4 = document.createElement('li');
-  li4.textContent = `Distance from your location:${Math.floor(calArr[1][1])} km` ;
-
+    // Set the info panel to display "Destination unavailable"
+    info.innerHTML = '<li>Destination unavailable</li>';
+    return;
+  }
     info.innerHTML = ''; // Clear existing content
     info.appendChild(li1);
     info.appendChild(li2);
@@ -164,17 +172,22 @@ function des2() {
   function des3() {
     const info = document.getElementById('info');
 
-    const li1 = document.createElement('li');
-    li1.textContent = `Airport name: ${desArr[2][0]}`;
-
-    const li2 = document.createElement('li');
-    li2.textContent = `Location : ${desArr[2][1]}, ${desArr[2][2]}`;
-
+      const li1 = document.createElement('li');
+   const li2 = document.createElement('li');
     const li3 = document.createElement('li');
-  li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[2][0])} g`;
+     const li4 = document.createElement('li');
 
-  const li4 = document.createElement('li');
-  li4.textContent = `Distance from your location:${Math.floor(calArr[2][1])} km` ;
+  try {
+    li1.textContent = `Airport name: ${desArr[2][0]}`;
+    li2.textContent = `Location: ${desArr[2][1]}, ${desArr[2][2]}`;
+    li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[2][0])} g`;
+    li4.textContent = `Distance from your location: ${Math.floor(calArr[2][1])} km`;
+  } catch (error) {
+    console.error(error);
+    // Set the info panel to display "Destination unavailable"
+    info.innerHTML = '<li>Destination unavailable</li>';
+    return;
+  }
 
     info.innerHTML = ''; // Clear existing content
     info.appendChild(li1);
@@ -185,18 +198,22 @@ function des2() {
   function des4() {
     const info = document.getElementById('info');
 
-    const li1 = document.createElement('li');
-    li1.textContent = `Airport name: ${desArr[3][0]}`;
-
-    const li2 = document.createElement('li');
-    li2.textContent = `Location : ${desArr[3][1]}, ${desArr[3][2]}`;
-
+      const li1 = document.createElement('li');
+   const li2 = document.createElement('li');
     const li3 = document.createElement('li');
-  li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[3][0])} g`;
+     const li4 = document.createElement('li');
 
-  const li4 = document.createElement('li');
-  li4.textContent = `Distance from your location:${Math.floor(calArr[3][1])} km` ;
-
+  try {
+    li1.textContent = `Airport name: ${desArr[3][0]}`;
+    li2.textContent = `Location: ${desArr[3][1]}, ${desArr[3][2]}`;
+    li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[3][0])} g`;
+    li4.textContent = `Distance from your location: ${Math.floor(calArr[3][1])} km`;
+  } catch (error) {
+    console.error(error);
+    // Set the info panel to display "Destination unavailable"
+    info.innerHTML = '<li>Destination unavailable</li>';
+    return;
+  }
     info.innerHTML = ''; // Clear existing content
     info.appendChild(li1);
     info.appendChild(li2);
@@ -206,18 +223,22 @@ function des2() {
   function des5() {
     const info = document.getElementById('info');
 
-    const li1 = document.createElement('li');
-    li1.textContent = `Airport name: ${desArr[4][0]}`;
-
-    const li2 = document.createElement('li');
-    li2.textContent = `Location : ${desArr[4][1]}, ${desArr[4][2]}`;
-
+      const li1 = document.createElement('li');
+   const li2 = document.createElement('li');
     const li3 = document.createElement('li');
-  li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[4][0])} g`;
+     const li4 = document.createElement('li');
 
-  const li4 = document.createElement('li');
-  li4.textContent = `Distance from your location:${Math.floor(calArr[4][1])} km` ;
-
+  try {
+    li1.textContent = `Airport name: ${desArr[4][0]}`;
+    li2.textContent = `Location: ${desArr[4][1]}, ${desArr[4][2]}`;
+    li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[4][0])} g`;
+    li4.textContent = `Distance from your location: ${Math.floor(calArr[4][1])} km`;
+  } catch (error) {
+    console.error(error);
+    // Set the info panel to display "Destination unavailable"
+    info.innerHTML = '<li>Destination unavailable</li>';
+    return;
+  }
     info.innerHTML = ''; // Clear existing content
     info.appendChild(li1);
     info.appendChild(li2);
