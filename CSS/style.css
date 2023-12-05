@@ -152,7 +152,7 @@ article h2 {
   list-style-type: none;
 }
 
-.map {
+#map {
   height: 600px;
     width: 50%;
 
