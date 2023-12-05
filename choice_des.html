@@ -14,22 +14,18 @@
 <div class="main">
 <article class="card" id = "status">
 <h3 id="round"> Airport info</h3>
-    <ul>
-        <li>Airport name:</li>
-        <li>Location :</li>
-        <li>Expected Co2 Consumption:</li>
-        <li>Distance from your location:</li>
+    <ul id="info">
     </ul>
 </article>
      <div id="des_map">
 <img id="map_ph" src = 'https://via.placeholder.com/210x295?text=map' width="830px" height="600px" alt = "map">
     </div>
     <div id ="choice_des">
-        <button id = "des1" class = "button-19" onclick="change1()">Destination 1</button>
-        <button id = "des2" class = "button-19" onclick="change2()">Destination 2</button>
-        <button id = "des3" class = "button-19" onclick="change3()">Destination 3</button>
-        <button id = "des4" class = "button-19" onclick="change4()">Destination 4</button>
-        <button id = "des5" class = "button-19" onclick="change5()">Destination 5</button>
+        <button id = "des1" class = "button-19" onclick="des1()">Destination 1</button>
+        <button id = "des2" class = "button-19" onclick="des2()">Destination 2</button>
+        <button id = "des3" class = "button-19" onclick="des3()">Destination 3</button>
+        <button id = "des4" class = "button-19" onclick="des4()">Destination 4</button>
+        <button id = "des5" class = "button-19" onclick="des5()">Destination 5</button>
     </div>
 </div>
 
@@ -49,7 +45,8 @@
     }
   })
 
-
+let desArr =[];
+  let calArr =[];
 async function cal_distance() {
     try {
       const userid = 'test_player'; //ph
@@ -62,13 +59,12 @@ async function cal_distance() {
         const response2 = await fetch(`http://127.0.0.1:3000/destination/${size}`); //candidate locations
         const jsonData2 = await response2.json();
         console.log(jsonData2);
-        //let desArr =[];
+
         for (let des of jsonData2){
-          //desArr.push((des[3],des[4], des[5]))
+          desArr.push([des[3],des[4],des[5]])
         }
-        //console.log(desArr)
-        const range = jsonData2[6];
-        const capacity = jsonData[7];
+        console.log(desArr)
+
 
 
         const current_lat = parseFloat(jsonData[1]);
@@ -92,14 +88,18 @@ async function cal_distance() {
             const response = await fetch(url, options);
             const result = await response.json();
             const kilometers = result.body.distance.kilometers;
-            console.log(kilometers); // distance in km
+            //console.log(kilometers); // distance in km
+
+            const range = parseFloat(des[6]);
+            const capacity = parseFloat(des[7]);
+
             const co2Emit = kilometers * range / capacity;
-            des.push(co2Emit, kilometers)
+            //console.log(co2Emit);
             if (range < kilometers || left_co2 < co2Emit){
               jsonData2.remove(des);
 
             }
-
+            calArr.push([co2Emit,kilometers]);
 
 
           } catch (error) {
@@ -109,6 +109,113 @@ async function cal_distance() {
     console.log(err.message);}
 }
 
+console.log(calArr);
+
+const info = document.getElementById('info');
+function des1() {
+  const info = document.getElementById('info');
+
+  const li1 = document.createElement('li');
+  li1.textContent = `Airport name: ${desArr[0][0]}`;
+
+  const li2 = document.createElement('li');
+  li2.textContent = `Location : ${desArr[0][1]}, ${desArr[0][2]}`;
+
+  const li3 = document.createElement('li');
+  li3.textContent = `Expected Co2 Consumption: ${calArr[0][0]} g`;
+
+  const li4 = document.createElement('li');
+  li4.textContent = `Distance from your location:${calArr[0][1]} km` ;
+
+  info.innerHTML = ''; // Clear existing content
+  info.appendChild(li1);
+  info.appendChild(li2);
+  info.appendChild(li3);
+  info.appendChild(li4);
+}
+function des2() {
+    const info = document.getElementById('info');
+
+    const li1 = document.createElement('li');
+    li1.textContent = `Airport name: ${desArr[1][0]}`;
+
+    const li2 = document.createElement('li');
+    li2.textContent = `Location : ${desArr[1][1]}, ${desArr[1][2]}`;
+
+    const li3 = document.createElement('li');
+    li3.textContent = 'Expected Co2 Consumption:';
+
+    const li4 = document.createElement('li');
+    li4.textContent = 'Distance from your location:';
+
+    info.innerHTML = ''; // Clear existing content
+    info.appendChild(li1);
+    info.appendChild(li2);
+    info.appendChild(li3);
+    info.appendChild(li4);}
+
+  function des3() {
+    const info = document.getElementById('info');
+
+    const li1 = document.createElement('li');
+    li1.textContent = `Airport name: ${desArr[2][0]}`;
+
+    const li2 = document.createElement('li');
+    li2.textContent = `Location : ${desArr[2][1]}, ${desArr[2][2]}`;
+
+    const li3 = document.createElement('li');
+    li3.textContent = 'Expected Co2 Consumption:';
+
+    const li4 = document.createElement('li');
+    li4.textContent = 'Distance from your location:';
+
+    info.innerHTML = ''; // Clear existing content
+    info.appendChild(li1);
+    info.appendChild(li2);
+    info.appendChild(li3);
+    info.appendChild(li4);}
+
+  function des4() {
+    const info = document.getElementById('info');
+
+    const li1 = document.createElement('li');
+    li1.textContent = `Airport name: ${desArr[3][0]}`;
+
+    const li2 = document.createElement('li');
+    li2.textContent = `Location : ${desArr[3][1]}, ${desArr[3][2]}`;
+
+    const li3 = document.createElement('li');
+    li3.textContent = 'Expected Co2 Consumption:';
+
+    const li4 = document.createElement('li');
+    li4.textContent = 'Distance from your location:';
+
+    info.innerHTML = ''; // Clear existing content
+    info.appendChild(li1);
+    info.appendChild(li2);
+    info.appendChild(li3);
+    info.appendChild(li4);}
+
+  function des5() {
+    const info = document.getElementById('info');
+
+    const li1 = document.createElement('li');
+    li1.textContent = `Airport name: ${desArr[4][0]}`;
+
+    const li2 = document.createElement('li');
+    li2.textContent = `Location : ${desArr[4][1]}, ${desArr[4][2]}`;
+
+    const li3 = document.createElement('li');
+    li3.textContent = 'Expected Co2 Consumption:';
+
+    const li4 = document.createElement('li');
+    li4.textContent = 'Distance from your location:';
+
+    info.innerHTML = ''; // Clear existing content
+    info.appendChild(li1);
+    info.appendChild(li2);
+    info.appendChild(li3);
+    info.appendChild(li4);}
 
 cal_distance();
 </script>
