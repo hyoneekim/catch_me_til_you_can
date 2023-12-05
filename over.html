@@ -33,8 +33,8 @@
     }
       //make the player re-try with the current player_name, but default setting again
 try {
-          const name = 'test_player'; //placeholder
-          const response = await fetch(`http://127.0.0.1:3000/re_try/${name}`);
+
+          const response = await fetch(`http://127.0.0.1:3000/re_try`);
           const jsonData = await response.json();
           console.log(jsonData);
           // then redirect to the main.html

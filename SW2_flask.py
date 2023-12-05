@@ -99,7 +99,7 @@ def get_player_name(name):
     return json.dumps(result)
 
 
-# Get player info to display
+# Get player info to display - Su did JS part Riina
 @app.route('/current')
 def get_data():
     sql = f'''SELECT * FROM player WHERE id = (SELECT MAX(id) FROM player)'''
@@ -150,7 +150,7 @@ def get_round():
     turn = 0
     for numb in result2:
         turn = int(numb['turn'])
-
+    # Insert new turn
     current = turn + 1
     sql4 = f'''INSERT INTO choice (turn, player_name)VALUES(%s, %s) '''
     val = (current, name)
@@ -170,6 +170,7 @@ def get_plane_info(type):
     return json.dumps(result)
 
 
+# get plane choice and update to choice table
 @app.route('/choose/<plane>')
 def enter_choice(plane):
     sql = f''' SELECT player_name FROM player WHERE  player_name = (SELECT player_name FROM player WHERE id = (SELECT MAX(id) FROM player))'''
@@ -188,18 +189,26 @@ def enter_choice(plane):
 
 
 # Reset player info, based on player_name - Riina
-@app.route('/re_try/<name>')
-def re_try(name):
+@app.route('/re_try')
+def re_try():
+    sql = f'''SELECT player_name FROM player WHERE id = (SELECT MAX(id) FROM player)'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql)
+    result1 = cursor.fetchall()
+    name = ''
+    for names in result1:
+        name = names['player_name']
+
     co2_budget = 5000000
     co2_consumed = 0
     total_travelled = 0
-    sql = f'''UPDATE player SET co2_budget="{co2_budget}", co2_consumed="{co2_consumed}", total_travelled ="{total_travelled}" WHERE player_name ="{name}"'''
-    cursor = connection.cursor(dictionary=True)
-    cursor.execute(sql)
-    cursor.fetchall()
-    sql2 = f'''DELETE FROM choice WHERE player_name = "{name}"'''
+    sql2 = f'''UPDATE player SET co2_budget="{co2_budget}", co2_consumed="{co2_consumed}", total_travelled ="{total_travelled}" WHERE player_name ="{name}"'''
     cursor = connection.cursor(dictionary=True)
     cursor.execute(sql2)
+    cursor.fetchall()
+    sql3 = f'''DELETE FROM choice WHERE player_name = "{name}"'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql3)
     cursor.fetchall()
     return json.dumps({'Result': 'Updated'})
 
