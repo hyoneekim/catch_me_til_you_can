@@ -120,9 +120,8 @@ def create_name(name):
     cursor.execute(sql, val)
     cursor.fetchall()
 
-    current = 0
     sql2 = f'''INSERT INTO choice (turn, player_name)VALUES(%s,%s)'''
-    val = (current, name)
+    val = (0, name)
     cursor = connection.cursor(dictionary=True)
     cursor.execute(sql2, val)
     cursor.fetchall()
@@ -148,6 +147,7 @@ def get_round():
     turns = '0'
     for numb in result2:
         turns = numb['turn']
+
     turn = int(turns)
     current = turn + 1
     sql4 = f'''INSERT INTO choice (turn, player_name)VALUES(%s, %s) '''

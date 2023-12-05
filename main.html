@@ -83,7 +83,6 @@
     }
   }
 
-
   window.addEventListener('load', async () => {
     try {
       const response = await fetch(`http://127.0.0.1:3000/current`);
@@ -101,15 +100,15 @@
     }
   });
 
-    async function rounds() {
+  async function rounds() {
     try {
       const response = await fetch(`http://127.0.0.1:3000/round`);
       const jsonData = await response.json();
       console.log(jsonData);
 
       document.querySelector('#round').innerHTML = 'ROUND ' + jsonData;
-    } catch(error){
-      console.log(error)
+    } catch (error) {
+      console.log(error);
     }
   }
 
