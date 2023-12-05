@@ -22,7 +22,7 @@
     </ul>
 </article>
      <div id="des_map">
-<img id="map_ph" src = 'https://via.placeholder.com/210x295?text=map' width="830px" height="600px">
+<img id="map_ph" src = 'https://via.placeholder.com/210x295?text=map' width="830px" height="600px" alt = "map">
     </div>
     <div id ="choice_des">
         <button id = "des1" class = "button-19" onclick="change1()">Destination 1</button>
@@ -48,4 +48,67 @@
       back.onclick= location.href='choice.html'
     }
   })
+
+
+async function cal_distance() {
+    try {
+      const userid = 'test_player'; //ph
+      const size = 'large_airport'; //ph
+        const response = await fetch(`http://127.0.0.1:3000/current/${userid}`); //current location
+        const jsonData = await response.json();
+        console.log(jsonData);
+        const left_co2 = jsonData[3]- jsonData[4];
+
+        const response2 = await fetch(`http://127.0.0.1:3000/destination/${size}`); //candidate locations
+        const jsonData2 = await response2.json();
+        console.log(jsonData2);
+        //let desArr =[];
+        for (let des of jsonData2){
+          //desArr.push((des[3],des[4], des[5]))
+        }
+        //console.log(desArr)
+        const range = jsonData2[6];
+        const capacity = jsonData[7];
+
+
+        const current_lat = parseFloat(jsonData[1]);
+        const current_lon = parseFloat(jsonData[2]);
+
+
+        for (let des of jsonData2) {
+          const des_lat = parseFloat(des[1]);
+          const des_lon = parseFloat(des[2]);
+
+          const url = `https://distance-calculator8.p.rapidapi.com/calc?startLatitude=${current_lat}&startLongitude=${current_lon}&endLatitude=${des_lat}&endLongitude=${des_lon}`;
+          const options = {
+            method: 'GET',
+            headers: {
+              'X-RapidAPI-Key': '881baf1ebbmshbafb5a2bc01a4fap185d4djsn1861d69602b0',
+              'X-RapidAPI-Host': 'distance-calculator8.p.rapidapi.com'
+            }
+          };
+
+          try {
+            const response = await fetch(url, options);
+            const result = await response.json();
+            const kilometers = result.body.distance.kilometers;
+            console.log(kilometers); // distance in km
+            const co2Emit = kilometers * range / capacity;
+            des.push(co2Emit, kilometers)
+            if (range < kilometers || left_co2 < co2Emit){
+              jsonData2.remove(des);
+
+            }
+
+
+
+          } catch (error) {
+          }
+        }
+  } catch (err){
+    console.log(err.message);}
+}
+
+
+cal_distance();
 </script>
