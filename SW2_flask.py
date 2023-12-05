@@ -99,6 +99,7 @@ def get_player_name(name):
     return json.dumps(result)
 
 
+# Get player info to display
 @app.route('/current')
 def get_data():
     sql = f'''SELECT * FROM player WHERE id = (SELECT MAX(id) FROM player)'''
@@ -131,6 +132,7 @@ def create_name(name):
 # Create round and send back round number - Riina
 @app.route('/round')
 def get_round():
+    # Get player name
     sql = f'''SELECT player_name FROM player WHERE id = (SELECT MAX(id) FROM player)'''
     cursor = connection.cursor(dictionary=True)
     cursor.execute(sql)
@@ -139,16 +141,16 @@ def get_round():
     for names in result1:
         name = names['player_name']
 
-    sql2 = f'''SELECT turn FROM choice WHERE player_name = "{name}" AND turn = (SELECT MAX(turn) FROM choice)'''
+    # Get current turn
+    sql2 = f'''SELECT turn FROM choice WHERE player_name = "{name}" AND turn = (SELECT MAX(turn) FROM choice WHERE player_name = "{name}")'''
     cursor = connection.cursor(dictionary=True)
     cursor.execute(sql2)
     result2 = cursor.fetchall()
 
-    turns = '0'
+    turn = 0
     for numb in result2:
-        turns = numb['turn']
+        turn = int(numb['turn'])
 
-    turn = int(turns)
     current = turn + 1
     sql4 = f'''INSERT INTO choice (turn, player_name)VALUES(%s, %s) '''
     val = (current, name)
