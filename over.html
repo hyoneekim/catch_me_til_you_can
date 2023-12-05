@@ -31,19 +31,19 @@
     const cond = confirm('You can re-try the game with your current player ID! Do you want it?');
     if (cond) {
     }
-      //make the player re-try with the current player_name, but default setting again
-try {
-          const name = 'test_player'; //placeholder
-          const response = await fetch(`http://127.0.0.1:3000/re_try/${name}`);
-          const jsonData = await response.json();
-          console.log(jsonData);
-          // then redirect to the main.html
-          location.href = 'main.html';
-        } catch (err) {
-          console.log(err.message);
-        }
+    //make the player re-try with the current player_name, but default setting again
+    try {
 
+      const response = await fetch(`http://127.0.0.1:3000/re_try`);
+      const jsonData = await response.json();
+      console.log(jsonData);
+      // then redirect to the main.html
+      location.href = 'main.html';
+    } catch (err) {
+      console.log(err.message);
     }
+
+  }
 </script>
 </body>
 </html>

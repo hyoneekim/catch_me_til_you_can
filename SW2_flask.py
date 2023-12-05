@@ -1,5 +1,5 @@
 import mysql.connector
-from flask import Flask, request
+from flask import Flask
 from flask_cors import CORS
 import json
 
@@ -17,29 +17,6 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-@app.route('/destination/<size>') #to get 5 candidate destinations
-def get_destination(size):
-    sql = f'''SELECT ident, latitude_deg, longitude_deg, airport.name, airport.continent, country.name as country, airplane.max_range, airplane.co2_emission_per_km, airplane.capacity
-                FROM airport 
-                INNER JOIN airplane on (airplane.size = airport.type)
-                INNER JOIN country on (airport.iso_country = country.iso_country)
-                WHERE airport.type = '{size}' ORDER BY RAND () LIMIT 5'''
-    cursor = connection.cursor()
-    cursor.execute(sql)
-    result = cursor.fetchall()
-    return json.dumps(result)
-
-@app.route('/current/<userid>') # getting current icao code the lat & lon info of the airport
-def get_current(userid):
-    sql = f'''SELECT p.current_location, a.latitude_deg, a.longitude_deg, co2_budget, co2_consumed
-FROM player p
-JOIN airport a ON p.current_location = a.ident
-WHERE p.player_name = "{userid}"
-'''
-    cursor = connection.cursor()
-    cursor.execute(sql)
-    result = cursor.fetchone()
-    return json.dumps(result)
 
 # sending the result data back to JS to display the info -su
 @app.route('/result/<turn>/<userid>')
@@ -58,7 +35,7 @@ def receive_pick():
     data = request.json
     received_pick = data.get('pick')
 
-    #placeholder user id and turn
+    # placeholder user id and turn
     turn = 1
     userid = 'su'
 
@@ -79,11 +56,10 @@ def receive_pick():
             cursor = connection.cursor()
             cursor.execute(sql3)
 
-
     return json.dumps({'Result': 'Updated'})
 
 
-#fetch event data -Su
+# fetch event data -Su
 @app.route('/event')
 def get_event():
     sql = f"SELECT * from event"
@@ -123,6 +99,16 @@ def get_player_name(name):
     return json.dumps(result)
 
 
+# Get player info to display - Su did JS part Riina
+@app.route('/current')
+def get_data():
+    sql = f'''SELECT * FROM player WHERE id = (SELECT MAX(id) FROM player)'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql)
+    result = cursor.fetchone()
+    return json.dumps(result)
+
+
 # Creating a player based on name - Riina
 @app.route('/create/<name>')
 def create_name(name):
@@ -134,38 +120,95 @@ def create_name(name):
     val = (name, co2_budget, co2_consumed, total_travelled)
     cursor.execute(sql, val)
     cursor.fetchall()
+
+    sql2 = f'''INSERT INTO choice (turn, player_name)VALUES(%s,%s)'''
+    val = (0, name)
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql2, val)
+    cursor.fetchall()
     return {'Player': 'Created'}
+
+
+# Create round and send back round number - Riina
+@app.route('/round')
+def get_round():
+    # Get player name
+    sql = f'''SELECT player_name FROM player WHERE id = (SELECT MAX(id) FROM player)'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql)
+    result1 = cursor.fetchall()
+    name = ''
+    for names in result1:
+        name = names['player_name']
+
+    # Get current turn
+    sql2 = f'''SELECT turn FROM choice WHERE player_name = "{name}" AND turn = (SELECT MAX(turn) FROM choice WHERE player_name = "{name}")'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql2)
+    result2 = cursor.fetchall()
+
+    turn = 0
+    for numb in result2:
+        turn = int(numb['turn'])
+    # Insert new turn
+    current = turn + 1
+    sql4 = f'''INSERT INTO choice (turn, player_name)VALUES(%s, %s) '''
+    val = (current, name)
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql4, val)
+    cursor.fetchall()
+    return json.dumps(current)
 
 
 # display plane types and info -Su
 @app.route('/plane/<type>')
 def get_plane_info(type):
-    sql = f'''SELECT type, size, capacity, co2_emission_per_km, max_range FROM airplane WHERE type = %s
-                '''
+    sql = f'''SELECT type, size, capacity, co2_emission_per_km, max_range FROM airplane WHERE type = %s '''
     cursor = connection.cursor(dictionary=True)
     cursor.execute(sql, (type,))
     result = cursor.fetchone()
     return json.dumps(result)
 
 
+# get plane choice and update to choice table
 @app.route('/choose/<plane>')
 def enter_choice(plane):
-    sql = f'''UPDATE choice SET plane_type = "{plane}" WHERE player_name = (SELECT player_name FROM player WHERE id = (SELECT MAX(id) FROM player))'''
+    sql = f''' SELECT player_name FROM player WHERE  player_name = (SELECT player_name FROM player WHERE id = (SELECT MAX(id) FROM player))'''
     cursor = connection.cursor(dictionary=True)
     cursor.execute(sql)
+    result1 = cursor.fetchall()
+    name = ''
+    for names in result1:
+        name = names['player_name']
+
+    sql2 = f'''UPDATE choice SET plane_type = "{plane}" WHERE player_name = "{name}" AND turn = (SELECT MAX(turn) FROM choice WHERE player_name = "{name}") '''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql2)
     cursor.fetchall()
     return json.dumps({'Info': 'Updated'})
 
 
 # Reset player info, based on player_name - Riina
-@app.route('/re_try/<name>')
-def re_try(name):
+@app.route('/re_try')
+def re_try():
+    sql = f'''SELECT player_name FROM player WHERE id = (SELECT MAX(id) FROM player)'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql)
+    result1 = cursor.fetchall()
+    name = ''
+    for names in result1:
+        name = names['player_name']
+
     co2_budget = 5000000
     co2_consumed = 0
     total_travelled = 0
-    sql = f'''UPDATE player SET co2_budget="{co2_budget}", co2_consumed="{co2_consumed}", total_travelled ="{total_travelled}" WHERE player_name ="{name}"'''
+    sql2 = f'''UPDATE player SET co2_budget="{co2_budget}", co2_consumed="{co2_consumed}", total_travelled ="{total_travelled}" WHERE player_name ="{name}"'''
     cursor = connection.cursor(dictionary=True)
-    cursor.execute(sql)
+    cursor.execute(sql2)
+    cursor.fetchall()
+    sql3 = f'''DELETE FROM choice WHERE player_name = "{name}"'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql3)
     cursor.fetchall()
     return json.dumps({'Result': 'Updated'})
 
@@ -173,4 +216,3 @@ def re_try(name):
 # check the host & port here
 if __name__ == '__main__':
     app.run(use_reloader=True, host='127.0.0.1', port=3000)
-

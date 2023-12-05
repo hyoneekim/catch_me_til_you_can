@@ -3,116 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <title>Fly me, 'til you can!</title>
-      <link href="/CSS/style.css" rel="stylesheet">
+    <link href="/CSS/style.css" rel="stylesheet">
 </head>
 <body>
 
-<div class ="container">
+<div class="container">
     <h2>Welcome, traveller!</h2>
-    <button id = "quit" class = "button-19" role="button" onclick="quit_ask()">Quit</button>
-    </div>
+    <button id="quit" class="button-19" role="button" onclick="quit_ask()">Quit</button>
+</div>
 <div class="main">
-<article class="card" id = "status">
-<h3 id="round"> ROUND *</h3>
-    <ul id ="list">
-    </ul>
-</article>
-    <div class="map"></div>
+    <article class="card" id="status">
+        <h3 id="round"> ROUND *</h3>
+        <ul id="list">
+        </ul>
+    </article>
+    <div id="map"></div>
 </div>
 
 <footer>
-<button id = "start" class = "button-19" role="button" onclick="location.href='choice.html'">Let's make a move!</button>
+    <button id="start" class="button-19" role="button" onclick="location.href='choice.html'">Let's make a move!</button>
 </footer>
 <script>
   'use strict';
+  // codes on Google maps
 
-  //player info
-
-    window.addEventListener('load', async () => {
-    try {
-      const name = 'test_player' //placeholder
-      const response = await fetch(`http://127.0.0.1:3000/${name}`);
-      const jsonData = await response.json();
-      console.log(jsonData);
-
-        const text = `<li>player name: ${jsonData.player_name}</li>
-        <li>Current Location : ${jsonData.current_location}</li>
-        <li>Remaining Co2 Budget: ${jsonData.co2_budget - jsonData.co2_consumed}</li>
-        <li>Travelled Distance: ${jsonData.total_travelled}</li>`
-
-  const list = document.getElementById('list');
-  list.innerHTML = text;
-    } catch (err){
-      console.log(err.message);
-    }})
-
-  async function check(){
-      try {
-        const ident = "EFHK"
-     const response = await fetch(`http://127.0.0.1:3000/location/${ident}`);
-     const jsonData = await response.json();
-    console.log(jsonData);}
-    catch (err){
-        console.log(err.message)
-    }
-  }
-  check();
-// codes on Google maps
-
-
-  (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
-        ({key: "AIzaSyC52xi_Q06CrDS4muCLTBE7U02kjRRVaO0", v: "beta"});
+  (g => {
+    var h, a, k, p = 'The Google Maps JavaScript API', c = 'google', l = 'importLibrary', q = '__ib__', m = document,
+        b = window;
+    b = b[c] || (b[c] = {});
+    var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams,
+        u = () => h || (h = new Promise(async (f, n) => {
+          await (a = m.createElement('script'));
+          e.set('libraries', [...r] + '');
+          for (k in g) e.set(k.replace(/[A-Z]/g, t => '_' + t[0].toLowerCase()), g[k]);
+          e.set('callback', c + '.maps.' + q);
+          a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+          d[q] = f;
+          a.onerror = () => h = n(Error(p + ' could not load.'));
+          a.nonce = m.querySelector('script[nonce]')?.nonce || '';
+          m.head.append(a);
+        }));
+    d[l] ? console.warn(p + ' only loads once. Ignoring:', g) : d[l] = (f, ...n) => r.add(f) &&
+        u().then(() => d[l](f, ...n));
+  })
+  ({key: 'AIzaSyC52xi_Q06CrDS4muCLTBE7U02kjRRVaO0', v: 'beta'});
   let map;
 
-async function initMap() {
-    const ident = 'EFHK'; //placeholder
-   //fetch the location data from Flask
-   try {
-     /*const response = await fetch(`http://127.0.0.1:3000/location/${ident}`);
-     const jsonData = await response.json();
-    console.log(jsonData);
-    const lat = jsonData["latitude_deg"];
-    const lng = jsonData["longitude_deg"]; */
-     const lat = 60.3172;
-     const lng = 24.963301;
+  async function initMap() {
+    // The location of Uluru
+    const position = {lat: 60.3172, lng: 24.963301};
+    // Request needed libraries.
+    //@ts-ignore
+    const {Map} = await google.maps.importLibrary('maps');
+    const {AdvancedMarkerView} = await google.maps.importLibrary('marker');
 
-    const position = { lat: lat, lng: lng };
-
-    const { Map } = await google.maps.importLibrary("maps");
-    const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
-
-    map = new Map(document.getElementById("map"), {
-      zoom: 12,
+    map = new Map(document.getElementById('map'), {
+      zoom: 5,
       center: position,
-      mapId: "DEMO_MAP_ID",
+      mapId: 'DEMO_MAP_ID',
     });
 
     const marker = new AdvancedMarkerView({
       map: map,
       position: position,
-      title: "Current location",
+      title: 'Current location',
+
     });
-  } catch (error) {
-    console.error('Error initializing map:', error.message);
-  }
-}
-
-initMap();
-
-
-
-//map ends here
-
-  function quit_ask(){
-  const quit = confirm(`Are you sure you want to quit? All unsaved progress will be lost.`);
-
-  if (quit){
-    return location.href ="index.html";
-  }
   }
 
+  initMap();
 
+  //map ends here
 
+  function quit_ask() {
+    const quit = confirm(`Are you sure you want to quit? All unsaved progress will be lost.`);
+
+    if (quit) {
+      return location.href = 'index.html';
+    }
+  }
+
+  window.addEventListener('load', async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:3000/current`);
+      const jsonData = await response.json();
+      console.log(jsonData);
+
+      const text = `<li>player name: ${jsonData.player_name}</li>
+        <li>Current Location : ${jsonData.current_location}</li>
+        <li>Remaining Co2 Budget: ${jsonData.co2_budget - jsonData.co2_consumed}</li>
+        <li>Travelled Distance: ${jsonData.total_travelled}</li>`;
+      const list = document.getElementById('list');
+      list.innerHTML = text;
+    } catch (err) {
+      console.log(err.message);
+    }
+  });
+
+  async function rounds() {
+    try {
+      const response = await fetch(`http://127.0.0.1:3000/round`);
+      const jsonData = await response.json();
+      console.log(jsonData);
+
+      document.querySelector('#round').innerHTML = 'ROUND ' + jsonData;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  rounds();
 
 </script>
 </body>
