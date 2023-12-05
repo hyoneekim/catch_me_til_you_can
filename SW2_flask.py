@@ -99,6 +99,15 @@ def get_player_name(name):
     return json.dumps(result)
 
 
+@app.route('/current')
+def get_data():
+    sql = f'''SELECT * FROM player WHERE id = (SELECT MAX(id) FROM player)'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql)
+    result = cursor.fetchone()
+    return json.dumps(result)
+
+
 # Creating a player based on name - Riina
 @app.route('/create/<name>')
 def create_name(name):
@@ -120,6 +129,7 @@ def create_name(name):
     return {'Player': 'Created'}
 
 
+# Create round and send back round number - Riina
 @app.route('/round')
 def get_round():
     sql = f'''SELECT player_name FROM player WHERE id = (SELECT MAX(id) FROM player)'''
@@ -145,7 +155,6 @@ def get_round():
     cursor = connection.cursor(dictionary=True)
     cursor.execute(sql4, val)
     cursor.fetchall()
-
     return json.dumps(current)
 
 
