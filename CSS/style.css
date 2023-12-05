@@ -100,6 +100,7 @@ h2 {
   margin-left: 2rem;
 }
 
+
 #quit, #back, #start, #destination, #next {
   width: 30%;
   margin-right: 3rem;
@@ -144,10 +145,17 @@ article h2 {
 #status {
   float: left;
   width: 35%;
+  margin-right: 3rem;
 }
 
 #status ul li {
   list-style-type: none;
+}
+
+#map {
+  height: 600px;
+    width: 50%;
+
 }
 #placeholder {
   display: inline-block;
