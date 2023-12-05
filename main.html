@@ -46,7 +46,7 @@
     d[l] ? console.warn(p + ' only loads once. Ignoring:', g) : d[l] = (f, ...n) => r.add(f) &&
         u().then(() => d[l](f, ...n));
   })
-  ({key: 'AIzaSyC52xi_Q06CrDS4muCLTBE7U02kjRRVaO0', v: 'beta'});
+  ({key: 'AIzaSyAza8l3o_jJq4WuiTO2jJ3x_Cr5UJx53mg', v: 'beta'});
   let map;
 
   async function initMap() {
@@ -71,7 +71,9 @@
     });
   }
 
-  initMap();
+  document.addEventListener('DOMContentLoaded', () => {
+    initMap();
+  });
 
   //map ends here
 
