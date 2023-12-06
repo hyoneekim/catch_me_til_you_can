@@ -58,11 +58,12 @@
 
   let map;
 
-  async function initMap() {
+    async function initMap(lat = 60.3172, lon= 24.963301) {
     // The location of Uluru
-    const position = {lat: 60.3172, lng: 24.963301};
-    // Request needed libraries.
-    //@ts-ignore
+    let position = {lat: 60.3172, lng: 24.963301};
+    position.lat = lat;
+    position.lng = lon;
+
     const {Map} = await google.maps.importLibrary('maps');
     const {AdvancedMarkerView} = await google.maps.importLibrary('marker');
 
@@ -81,6 +82,7 @@
   }
 
   initMap();
+
   const back = document.getElementById('back');
   back.addEventListener('click', (evt) => {
     confirm(`Are you sure you want to go back to choosing the airplane?
@@ -101,7 +103,7 @@
 
   async function cal_distance() {
     try {
-      const userid = 'Moikka'; //ph
+      const userid = 'test_player'; //ph
       const size = 'large_airport'; //ph
       const response = await fetch(`http://127.0.0.1:3000/current/${userid}`); //current location
       const jsonData = await response.json();
@@ -113,7 +115,7 @@
       console.log(jsonData2);
 
       for (let des of jsonData2) {
-        desArr.push([des[3], des[4], des[5]]);
+        desArr.push([des[1],des[2],des[3], des[4], des[5]]);
       }
       console.log(desArr);
 
@@ -176,6 +178,8 @@
       li2.textContent = `Location: ${desArr[0][1]}, ${desArr[0][2]}`;
       li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[0][0])} g`;
       li4.textContent = `Distance from your location: ${Math.floor(calArr[0][1])} km`;
+
+      initMap(desArr[0][0], desArr[0][1]);
     } catch (error) {
       console.error(error);
       // Set the info panel to display "Destination unavailable"
@@ -204,6 +208,7 @@
       li2.textContent = `Location: ${desArr[1][1]}, ${desArr[1][2]}`;
       li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[1][0])} g`;
       li4.textContent = `Distance from your location: ${Math.floor(calArr[1][1])} km`;
+      initMap(desArr[1][0], desArr[1][1]);
     } catch (error) {
       console.error(error);
 
@@ -232,6 +237,7 @@
       li2.textContent = `Location: ${desArr[2][1]}, ${desArr[2][2]}`;
       li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[2][0])} g`;
       li4.textContent = `Distance from your location: ${Math.floor(calArr[2][1])} km`;
+      initMap(desArr[2][0], desArr[2][1]);
     } catch (error) {
       console.error(error);
       // Set the info panel to display "Destination unavailable"
@@ -260,6 +266,7 @@
       li2.textContent = `Location: ${desArr[3][1]}, ${desArr[3][2]}`;
       li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[3][0])} g`;
       li4.textContent = `Distance from your location: ${Math.floor(calArr[3][1])} km`;
+      initMap(desArr[3][0], desArr[3][1]);
     } catch (error) {
       console.error(error);
       // Set the info panel to display "Destination unavailable"
@@ -287,6 +294,7 @@
       li2.textContent = `Location: ${desArr[4][1]}, ${desArr[4][2]}`;
       li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[4][0])} g`;
       li4.textContent = `Distance from your location: ${Math.floor(calArr[4][1])} km`;
+      initMap(desArr[4][0], desArr[4][1]);
     } catch (error) {
       console.error(error);
       // Set the info panel to display "Destination unavailable"
