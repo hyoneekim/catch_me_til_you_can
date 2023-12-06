@@ -51,7 +51,7 @@
 
   async function cal_distance() {
     try {
-      const userid = 'Riina'; //ph
+      const userid = 'Moikka'; //ph
       const size = 'large_airport'; //ph
       const response = await fetch(`http://127.0.0.1:3000/current/${userid}`); //current location
       const jsonData = await response.json();
@@ -291,8 +291,8 @@
         const jsonData = await response.json();
         console.log(jsonData);
         location.href = 'event.html'; // If enough co2 left redirect to event
-      } else if ((budget - co2_spent) < 0) {
-        location.href = 'over.html'; // If not enough co2 left redirect to game over
+      } else {
+        location.href = 'over.html'; // No options left so redirect to game over
       }
     } catch (error) {
       console.log(error);
