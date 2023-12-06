@@ -16,6 +16,8 @@ connection = mysql.connector.connect(
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
+
+
 @app.route('/destination/<size>')
 def get_destination(size):
     sql = f'''SELECT ident, latitude_deg, longitude_deg, airport.name, airport.continent, country.name as country, airplane.max_range, airplane.co2_emission_per_km, airplane.capacity
@@ -28,18 +30,17 @@ def get_destination(size):
     result = cursor.fetchall()
     return json.dumps(result)
 
-@app.route('/current/<userid>') # getting current icao code the lat & lon info of the airport
+
+@app.route('/current/<userid>')  # getting current icao code the lat & lon info of the airport
 def get_current(userid):
     sql = f'''SELECT p.current_location, a.latitude_deg, a.longitude_deg, co2_budget, co2_consumed
-FROM player p
-JOIN airport a ON p.current_location = a.ident
-WHERE p.player_name = "{userid}"
-'''
+                FROM player p
+                JOIN airport a ON p.current_location = a.ident
+                WHERE p.player_name = "{userid}"'''
     cursor = connection.cursor()
     cursor.execute(sql)
     result = cursor.fetchone()
     return json.dumps(result)
-
 
 
 # sending the result data back to JS to display the info -su
@@ -123,7 +124,7 @@ def get_player_name(name):
     return json.dumps(result)
 
 
-# Get player info to display - Su did JS part Riina
+# Get player info to display - Su did JS part Riina rest
 @app.route('/current')
 def get_data():
     sql = f'''SELECT * FROM player WHERE id = (SELECT MAX(id) FROM player)'''
@@ -194,7 +195,7 @@ def get_plane_info(type):
     return json.dumps(result)
 
 
-# get plane choice and update to choice table
+# get plane choice and update to choice table - Riina
 @app.route('/choose/<plane>')
 def enter_choice(plane):
     sql = f''' SELECT player_name FROM player WHERE  player_name = (SELECT player_name FROM player WHERE id = (SELECT MAX(id) FROM player))'''
@@ -209,6 +210,61 @@ def enter_choice(plane):
     cursor = connection.cursor(dictionary=True)
     cursor.execute(sql2)
     cursor.fetchall()
+    return json.dumps({'Info': 'Updated'})
+
+
+# Get co2_budget of player - Riina
+@app.route('/co2_budget')
+def get_co2_budget():
+    sql = f'''SELECT co2_budget FROM player WHERE id = (SELECT MAX(id) FROM player)'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    return json.dumps(result)
+
+
+# Get airport, co2_spent and distance. Update info to choice and location to player current location - Riina
+@app.route('/<airport>/<co2_spent>/<distance>')
+def update_co2_etc_info(airport, co2_spent, distance):
+    # Get player name
+    sql = f'''SELECT player_name FROM player WHERE id = (SELECT MAX(id) FROM player)'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql)
+    result1 = cursor.fetchall()
+    name = ''
+    for names in result1:
+        name = names['player_name']
+
+    # Get current turn
+    sql2 = f'''SELECT turn FROM choice WHERE player_name = "{name}" AND turn = (SELECT MAX(turn) FROM choice WHERE player_name = "{name}")'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql2)
+    result2 = cursor.fetchall()
+    turn = 0
+    for numb in result2:
+        turn = int(numb['turn'])
+
+    # Get airports ICAO code based on airport name
+    sql3 = '''SELECT ident FROM airport WHERE name LIKE  %s '''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql3, (airport,))
+    result3 = cursor.fetchall()
+    icao = ''
+    for loc in result3:
+        icao = loc['ident']
+
+    # Update co2_spent and distance to choice
+    sql4 = f'''UPDATE choice SET co2_spent = "{co2_spent}", distance_km = "{distance}" WHERE player_name = "{name}" AND turn = "{turn}"'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql4)
+    cursor.fetchall()
+
+    # Update player location
+    sql5 = f'''UPDATE player SET current_location = "{icao}" WHERE player_name = "{name}"'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql5)
+    cursor.fetchall()
+
     return json.dumps({'Info': 'Updated'})
 
 
