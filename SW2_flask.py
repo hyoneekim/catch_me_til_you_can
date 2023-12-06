@@ -16,6 +16,19 @@ connection = mysql.connector.connect(
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
+
+# getting location and airport names for display in main.html -Su
+@app.route('/coord')
+def get_coordinates():
+    sql = f'''SELECT name, iso_country, latitude_deg, longitude_deg
+FROM airport
+INNER JOIN player ON airport.ident = player.current_location
+WHERE player.id = (SELECT MAX(id) FROM player)
+'''
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    result = cursor.fetchone()
+    return json.dumps(result)
 @app.route('/destination/<size>')
 def get_destination(size):
     sql = f'''SELECT ident, latitude_deg, longitude_deg, airport.name, airport.continent, country.name as country, airplane.max_range, airplane.co2_emission_per_km, airplane.capacity
