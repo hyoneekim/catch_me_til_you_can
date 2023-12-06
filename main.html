@@ -89,7 +89,7 @@
       const jsonData = await response.json();
       console.log(jsonData);
 
-      const text = `<li>player name: ${jsonData.player_name}</li>
+      const text = `<li>Player Name: ${jsonData.player_name}</li>
         <li>Current Location : ${jsonData.current_location}</li>
         <li>Remaining Co2 Budget: ${jsonData.co2_budget - jsonData.co2_consumed}</li>
         <li>Travelled Distance: ${jsonData.total_travelled}</li>`;
