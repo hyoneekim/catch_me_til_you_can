@@ -11,20 +11,21 @@
     <button id="back" class="button-19" role="button">Back</button>
 </div>
 <div class="main">
-    <article class="card" id="status">
-        <h3 id="round"> Airport info</h3>
-        <ul id="info">
-        </ul>
-    </article>
-    <div class="map"></div>
-</div>
-<div id="choice_des">
-    <button id="des1" class="button-19" onclick="des1()">Destination 1</button>
-    <button id="des2" class="button-19" onclick="des2()">Destination 2</button>
-    <button id="des3" class="button-19" onclick="des3()">Destination 3</button>
-    <button id="des4" class="button-19" onclick="des4()">Destination 4</button>
-    <button id="des5" class="button-19" onclick="des5()">Destination 5</button>
-</div>
+
+<article class="card" id = "status">
+<h3 id="round"> Airport info</h3>
+    <ul id="info">
+    </ul>
+</article>
+     <div class="map" id="des_map"></div>
+    </div>
+    <div id ="choice_des">
+        <button id = "des1" class = "button-19" onclick="des1()">Destination 1</button>
+        <button id = "des2" class = "button-19" onclick="des2()">Destination 2</button>
+        <button id = "des3" class = "button-19" onclick="des3()">Destination 3</button>
+        <button id = "des4" class = "button-19" onclick="des4()">Destination 4</button>
+        <button id = "des5" class = "button-19" onclick="des5()">Destination 5</button>
+    </div>
 </div>
 
 <footer>
@@ -32,6 +33,54 @@
 </footer>
 <script>
   'use strict';
+
+    //map
+ (g => {
+    var h, a, k, p = 'The Google Maps JavaScript API', c = 'google', l = 'importLibrary', q = '__ib__', m = document,
+        b = window;
+    b = b[c] || (b[c] = {});
+    var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams,
+        u = () => h || (h = new Promise(async (f, n) => {
+          await (a = m.createElement('script'));
+          e.set('libraries', [...r] + '');
+          for (k in g) e.set(k.replace(/[A-Z]/g, t => '_' + t[0].toLowerCase()), g[k]);
+          e.set('callback', c + '.maps.' + q);
+          a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+          d[q] = f;
+          a.onerror = () => h = n(Error(p + ' could not load.'));
+          a.nonce = m.querySelector('script[nonce]')?.nonce || '';
+          m.head.append(a);
+        }));
+    d[l] ? console.warn(p + ' only loads once. Ignoring:', g) : d[l] = (f, ...n) => r.add(f) &&
+        u().then(() => d[l](f, ...n));
+  })
+  ({key: 'AIzaSyC52xi_Q06CrDS4muCLTBE7U02kjRRVaO0', v: 'beta'});
+
+  let map;
+
+  async function initMap() {
+    // The location of Uluru
+    const position = {lat: 60.3172, lng: 24.963301};
+    // Request needed libraries.
+    //@ts-ignore
+    const {Map} = await google.maps.importLibrary('maps');
+    const {AdvancedMarkerView} = await google.maps.importLibrary('marker');
+
+    map = new Map(document.getElementById('des_map'), {
+      zoom: 5,
+      center: position,
+      mapId: 'DEMO_MAP_ID',
+    });
+
+    const marker = new AdvancedMarkerView({
+      map: map,
+      position: position,
+      title: 'Current location',
+
+    });
+  }
+
+  initMap();
   const back = document.getElementById('back');
   back.addEventListener('click', (evt) => {
     confirm(`Are you sure you want to go back to choosing the airplane?
@@ -43,7 +92,8 @@
     }
   });
 
-  //map
+
+
 
   //info panel
   let desArr = [];

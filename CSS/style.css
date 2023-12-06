@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Advent+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 html {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-family: 'Advent Pro', sans-serif;
 }
+
 
 body {
     background-color: #04C4D9;
@@ -98,6 +101,8 @@ body {
 h2 {
   float: left;
   margin-left: 2rem;
+  margin-top: 1.5rem;
+  font-size: xx-large;
 }
 
 
@@ -128,6 +133,7 @@ article {
   transition: all 0.2s ease-in-out;
   line-height: 2rem;
   display: inline-block;
+  font-size: larger;
 }
 
 article:hover {
@@ -215,13 +221,13 @@ th {
 /* choice_des.html */
 
 #des_map{
+    height: 600px;
   display: inline-block;
   float: right;
-  width: 60%;
+  width: 55%;
+  margin-right: 2rem;
 }
-#map_ph{
-  width: 90%;
-}
+
 #choice_des{
   margin-top: 2rem;
   display: inline-block;
@@ -273,3 +279,40 @@ th {
   text-align: center;
 
 }
+
+
+*, *:before, *:after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+table {
+  background: #105469;
+  border-radius: 0.25em;
+  border-collapse: collapse;
+  margin: 1em;
+}
+th {
+  border-bottom: 1px solid #364043;
+  color: #E2B842;
+  font-size: 0.85em;
+  font-weight: 600;
+  padding: 0.5em 1em;
+  text-align: left;
+}
+td {
+  color: #fff;
+  font-weight: 400;
+  padding: 0.65em 1em;
+}
+.disabled td {
+  color: #4F5F64;
+}
+tbody tr {
+  transition: background 0.25s ease;
+}
+tbody tr:hover {
+  background: #014055;
+}
+
