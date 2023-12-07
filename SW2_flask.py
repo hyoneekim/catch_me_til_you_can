@@ -35,6 +35,7 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+
 # update the final score to the scoreboard table in DB. -Su
 @app.route('/save')
 def post_score():
@@ -60,14 +61,14 @@ def post_score():
 @app.route('/coord')
 def get_coordinates():
     sql = f'''SELECT name, iso_country, latitude_deg, longitude_deg
-FROM airport
-INNER JOIN player ON airport.ident = player.current_location
-WHERE player.id = (SELECT MAX(id) FROM player)
-'''
+        FROM airport
+        INNER JOIN player ON airport.ident = player.current_location
+        WHERE player.id = (SELECT MAX(id) FROM player)'''
     cursor = connection.cursor()
     cursor.execute(sql)
     result = cursor.fetchone()
     return json.dumps(result)
+
 
 @app.route('/destination/<size>')
 def get_destination(size):
@@ -75,7 +76,7 @@ def get_destination(size):
                 FROM airport 
                 INNER JOIN airplane on (airplane.size = airport.type)
                 INNER JOIN country on (airport.iso_country = country.iso_country)
-                WHERE airport.type = '{size}' ORDER BY RAND () LIMIT 5'''
+                WHERE airport.type = "{size}" ORDER BY RAND () LIMIT 5'''
     cursor = connection.cursor()
     cursor.execute(sql)
     result = cursor.fetchall()
@@ -85,9 +86,10 @@ def get_destination(size):
 @app.route('/current/<userid>')  # getting current icao code the lat & lon info of the airport
 def get_current(userid):
     sql = f'''SELECT p.current_location, a.latitude_deg, a.longitude_deg, co2_budget, co2_consumed
-                FROM player p
-                JOIN airport a ON p.current_location = a.ident
-                WHERE p.player_name = "{userid}"'''
+        FROM player p 
+        JOIN airport a ON p.current_location = a.ident
+        WHERE p.player_name = "{userid}"
+        '''
     cursor = connection.cursor()
     cursor.execute(sql)
     result = cursor.fetchone()
@@ -113,7 +115,7 @@ def receive_pick():
 
     # placeholder user id and turn
     turn = 1
-    userid = 'su'
+    userid = 'moikka'
 
     if received_pick[2] == 'NULL':
         sql = f"UPDATE choice SET event_occurred = {received_pick[0]} WHERE turn = {turn} AND player_name = '{userid}'"
@@ -179,10 +181,11 @@ def get_player_name(name):
 @app.route('/current')
 def get_data():
     sql = f'''SELECT * FROM player WHERE id = (SELECT MAX(id) FROM player)'''
-    cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor()
     cursor.execute(sql)
     result = cursor.fetchone()
     return json.dumps(result)
+
 
 
 # Creating a player based on name - Riina
@@ -210,12 +213,10 @@ def create_name(name):
 def get_round():
     # Get player name
     sql = f'''SELECT player_name FROM player WHERE id = (SELECT MAX(id) FROM player)'''
-    cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor()
     cursor.execute(sql)
     result1 = cursor.fetchall()
-    name = ''
-    for names in result1:
-        name = names['player_name']
+    name = result1[0][0]
 
     # Get current turn
     sql2 = f'''SELECT turn FROM choice WHERE player_name = "{name}" AND turn = (SELECT MAX(turn) FROM choice WHERE player_name = "{name}")'''
@@ -226,11 +227,12 @@ def get_round():
     turn = 0
     for numb in result2:
         turn = int(numb['turn'])
+
     # Insert new turn
     current = turn + 1
     sql4 = f'''INSERT INTO choice (turn, player_name)VALUES(%s, %s) '''
     val = (current, name)
-    cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor()
     cursor.execute(sql4, val)
     cursor.fetchall()
     return json.dumps(current)
@@ -254,8 +256,8 @@ def enter_choice(plane):
     cursor.execute(sql)
     result1 = cursor.fetchall()
     name = ''
-    for names in result1:
-        name = names['player_name']
+    for info in result1:
+        name = info['player_name']
 
     sql2 = f'''UPDATE choice SET plane_type = "{plane}" WHERE player_name = "{name}" AND turn = (SELECT MAX(turn) FROM choice WHERE player_name = "{name}") '''
     cursor = connection.cursor(dictionary=True)
@@ -283,8 +285,8 @@ def update_co2_etc_info(airport, co2_spent, distance):
     cursor.execute(sql)
     result1 = cursor.fetchall()
     name = ''
-    for names in result1:
-        name = names['player_name']
+    for info in result1:
+        name = info['player_name']
 
     # Get current turn
     sql2 = f'''SELECT turn FROM choice WHERE player_name = "{name}" AND turn = (SELECT MAX(turn) FROM choice WHERE player_name = "{name}")'''
@@ -315,9 +317,29 @@ def update_co2_etc_info(airport, co2_spent, distance):
     cursor = connection.cursor(dictionary=True)
     cursor.execute(sql5)
     cursor.fetchall()
-
     return json.dumps({'Info': 'Updated'})
 
+
+@app.route('/update_player')
+def update_player():
+    sql1 = f''' SELECT player_name FROM player WHERE id = (SELECT MAX(id) FROM player)'''
+    cursor = connection.cursor()
+    cursor.execute(sql1)
+    result = cursor.fetchall()
+    player = result[0][0]
+
+
+    sql2 = f'''SELECT distance_km, co2_spent from choice where player_name = "{player}" and turn = (select max(turn) from choice where player_name = "{player}")'''
+    cursor = connection.cursor()
+    cursor.execute(sql2)
+    result2 = cursor.fetchall()
+    distance = result2[0][0]
+    co2 = result2[0][1]
+
+    sql3 = f'''UPDATE player SET co2_budget = (co2_budget - {co2}), co2_consumed = (co2_consumed + {co2}), total_travelled = (total_travelled + {distance}) WHERE player_name = "{player}"'''
+    cursor = connection.cursor()
+    cursor.execute(sql3)
+    cursor.fetchall()
 
 # Reset player info, based on player_name - Riina
 @app.route('/re_try')
@@ -333,7 +355,8 @@ def re_try():
     co2_budget = 5000000
     co2_consumed = 0
     total_travelled = 0
-    sql2 = f'''UPDATE player SET co2_budget="{co2_budget}", co2_consumed="{co2_consumed}", total_travelled ="{total_travelled}" WHERE player_name ="{name}"'''
+    current_location = "EFHK"
+    sql2 = f'''UPDATE player SET current_location = "{current_location}", co2_budget="{co2_budget}", co2_consumed="{co2_consumed}", total_travelled ="{total_travelled}" WHERE player_name ="{name}"'''
     cursor = connection.cursor(dictionary=True)
     cursor.execute(sql2)
     cursor.fetchall()

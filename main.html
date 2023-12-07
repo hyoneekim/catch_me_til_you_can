@@ -50,12 +50,11 @@
   ({key: 'AIzaSyAza8l3o_jJq4WuiTO2jJ3x_Cr5UJx53mg', v: 'beta'});
   let map;
 
-  async function initMap(lat,lon) {
+  async function initMap(lat, lon) {
     // The location of Uluru
     let position = {lat: 60.3172, lng: 24.963301};
     position.lat = lat;
     position.lng = lon;
-
 
     const {Map} = await google.maps.importLibrary('maps');
     const {AdvancedMarkerView} = await google.maps.importLibrary('marker');
@@ -76,8 +75,6 @@
 
   //map ends here
 
-
-
   function quit_ask() {
     const quit = confirm(`Are you sure you want to quit? All the progress will be lost.`);
 
@@ -96,10 +93,16 @@
       const jsonData2 = await response2.json();
       console.log(jsonData2);
 
-      const text = `<li>Player Name: ${jsonData.player_name}</li>
+      const response3 = await fetch(`http://127.0.0.1:3000/round`);
+      const jsonData3 = await response3.json();
+      console.log(jsonData3);
+
+      document.querySelector('#round').innerHTML = 'ROUND ' + jsonData3;
+
+      const text = `<li>Player Name: ${jsonData[1]}</li>
         <li>Current Location : ${jsonData2[0]}, ${jsonData2[1]}</li>
-        <li>Remaining Co2 Budget: ${jsonData.co2_budget - jsonData.co2_consumed}</li>
-        <li>Travelled Distance: ${jsonData.total_travelled}</li>`;
+        <li>Remaining Co2 Budget: ${jsonData[2]}</li>
+        <li>Travelled Distance: ${jsonData[4]}</li>`;
       const list = document.getElementById('list');
       list.innerHTML = text;
 
@@ -109,19 +112,14 @@
     }
   });
 
-  async function rounds() {
-    try {
-      const response = await fetch(`http://127.0.0.1:3000/round`);
-      const jsonData = await response.json();
-      console.log(jsonData);
 
-      document.querySelector('#round').innerHTML = 'ROUND ' + jsonData;
+  /*async function rounds() {
+    try {
+
     } catch (error) {
       console.log(error);
     }
-  }
-
-  rounds();
+  }*/
 
 
 </script>
