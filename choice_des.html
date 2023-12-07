@@ -92,7 +92,7 @@ initMap();
     if (back) {
       back.onclick = location.href = 'choice.html';
     }
-  });
+  }); // this needs to be changed
 
 
 
@@ -104,8 +104,14 @@ initMap();
 
   async function cal_distance() {
     try {
-      const userid = 'test_player'; //ph
-      const size = 'large_airport'; //ph
+
+        const response3 = await fetch(`http://127.0.0.1:3000/choice`);
+        const jsonData3 = await response3.json();
+
+        const userid = jsonData3.player_name;
+        const size = jsonData3.plane_type;
+
+
       const response = await fetch(`http://127.0.0.1:3000/current/${userid}`); //current location
       const jsonData = await response.json();
       console.log(jsonData);
