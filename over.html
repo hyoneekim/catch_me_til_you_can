@@ -15,11 +15,17 @@
 <script>
   'use strict';
 
-  function wantSave() {
+  async function wantSave() {
     const save = confirm('Do you want to save your score?');
     if (save) {
-      //make it saved: to DB
+      try {
+
+      const response = await fetch(`http://127.0.0.1:3000/save`);
+      const jsonData = await response.json();
+      console.log(jsonData);
       alert('Your score has been saved to the score board!');
+    } catch (err){
+      console.log(err.message)}
     }
   }
 

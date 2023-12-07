@@ -17,6 +17,27 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+# update the final score to the scoreboard table in DB. -Su
+@app.route('/save')
+def post_score():
+    sql = f'''SELECT player_name, total_travelled FROM player WHERE id = (SELECT MAX(id) FROM player)'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql)
+    result = cursor.fetchone()
+
+    if result:
+        name = result['player_name']
+        score = result['total_travelled']
+
+        sql2 = '''INSERT INTO scoreboard (player_name, score) VALUES (%s, %s)'''
+        cursor.execute(sql2, (name, score))
+        connection.commit()
+
+        return json.dumps({'Result': 'Updated'})
+    else:
+        return json.dumps({'Result': 'No data found'})
+
+
 # getting location and airport names for display in main.html -Su
 @app.route('/coord')
 def get_coordinates():
