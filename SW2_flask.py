@@ -13,27 +13,27 @@ connection = mysql.connector.connect(
     autocommit=True
 )
 
+app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 
 @app.route('/choice')
 def get_choice():
     sql = f'''SELECT p.player_name, c.plane_type
-FROM player p
-JOIN (
+    FROM player p
+    JOIN (
     SELECT player_name, MAX(turn) AS max_turn
     FROM choice
     GROUP BY player_name
-) AS max_turns ON p.player_name = max_turns.player_name
-JOIN choice c ON max_turns.player_name = c.player_name AND max_turns.max_turn = c.turn
-WHERE p.id = (SELECT MAX(id) FROM player)
-'''
+    ) AS max_turns ON p.player_name = max_turns.player_name
+    JOIN choice c ON max_turns.player_name = c.player_name AND max_turns.max_turn = c.turn
+    WHERE p.id = (SELECT MAX(id) FROM player)
+    '''
     cursor = connection.cursor(dictionary=True)
     cursor.execute(sql)
     result = cursor.fetchone()
     return json.dumps(result)
-
-app = Flask(__name__)
-cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
 
 
 # update the final score to the scoreboard table in DB. -Su
@@ -322,13 +322,14 @@ def update_co2_etc_info(airport, co2_spent, distance):
 
 @app.route('/update_player')
 def update_player():
+    # Get player_name
     sql1 = f''' SELECT player_name FROM player WHERE id = (SELECT MAX(id) FROM player)'''
     cursor = connection.cursor()
     cursor.execute(sql1)
     result = cursor.fetchall()
     player = result[0][0]
 
-
+    # Get players last rounds choices
     sql2 = f'''SELECT distance_km, co2_spent from choice where player_name = "{player}" and turn = (select max(turn) from choice where player_name = "{player}")'''
     cursor = connection.cursor()
     cursor.execute(sql2)
@@ -336,10 +337,13 @@ def update_player():
     distance = result2[0][0]
     co2 = result2[0][1]
 
-    sql3 = f'''UPDATE player SET co2_budget = (co2_budget - {co2}), co2_consumed = (co2_consumed + {co2}), total_travelled = (total_travelled + {distance}) WHERE player_name = "{player}"'''
+    # Update player tables info
+    sql3 = f'''UPDATE player SET co2_consumed = (co2_consumed + {co2}), total_travelled = (total_travelled + {distance}) WHERE player_name = "{player}"'''
     cursor = connection.cursor()
     cursor.execute(sql3)
     cursor.fetchall()
+
+    return ({'info': 'updated'})
 
 # Reset player info, based on player_name - Riina
 @app.route('/re_try')
