@@ -343,7 +343,7 @@ def update_player():
     cursor.execute(sql3)
     cursor.fetchall()
 
-    return ({'info': 'updated'})
+    return json.dumps({'info': 'updated'})
 
 # Reset player info, based on player_name - Riina
 @app.route('/re_try')
