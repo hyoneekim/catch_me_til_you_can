@@ -59,7 +59,6 @@
   let map;
 
     async function initMap(lat = 60.3172, lon= 24.963301) {
-    // The location of Uluru
     let position = {lat: 60.3172, lng: 24.963301};
     position.lat = lat;
     position.lng = lon;
@@ -80,21 +79,17 @@
 
     });
   }
-initMap();
 
+initMap();
 
   const back = document.getElementById('back');
   back.addEventListener('click', (evt) => {
-    confirm(`Are you sure you want to go back to choosing the airplane?
-    You'll lose one of your turns to make a change.
-
-    Your remaining chance(s): `);
+    confirm(`Do you want to go back to choose another airplane?
+    When there isn't any available destination, the game will be over!`);
     if (back) {
       back.onclick = location.href = 'choice.html';
     }
   }); // this needs to be changed
-
-
 
 
 

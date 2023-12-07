@@ -13,6 +13,24 @@ connection = mysql.connector.connect(
     autocommit=True
 )
 
+
+@app.route('/choice')
+def get_choice():
+    sql = f'''SELECT p.player_name, c.plane_type
+FROM player p
+JOIN (
+    SELECT player_name, MAX(turn) AS max_turn
+    FROM choice
+    GROUP BY player_name
+) AS max_turns ON p.player_name = max_turns.player_name
+JOIN choice c ON max_turns.player_name = c.player_name AND max_turns.max_turn = c.turn
+WHERE p.id = (SELECT MAX(id) FROM player)
+'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql)
+    result = cursor.fetchone()
+    return json.dumps(result)
+
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
