@@ -26,7 +26,7 @@
         <button id = "des4" class = "button-19" onclick="des4()">Destination 4</button>
         <button id = "des5" class = "button-19" onclick="des5()">Destination 5</button>
     </div>
-</div>
+
 
 <footer>
     <button id="start" class="button-19" role="button" onclick="game_over_check()">Let's fly!</button>
@@ -81,7 +81,8 @@
     });
   }
 
-  initMap();
+initMap();
+
 
   const back = document.getElementById('back');
   back.addEventListener('click', (evt) => {
@@ -93,6 +94,7 @@
       back.onclick = location.href = 'choice.html';
     }
   });
+
 
 
 
@@ -174,8 +176,8 @@
     const li4 = document.createElement('li');
 
     try {
-      li1.textContent = `Airport name: ${desArr[0][0]}`;
-      li2.textContent = `Location: ${desArr[0][1]}, ${desArr[0][2]}`;
+      li1.textContent = `Airport name: ${desArr[0][2]}`;
+      li2.textContent = `Location: ${desArr[0][4]}, ${desArr[0][3]}`;
       li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[0][0])} g`;
       li4.textContent = `Distance from your location: ${Math.floor(calArr[0][1])} km`;
 
@@ -204,8 +206,8 @@
     const li4 = document.createElement('li');
 
     try {
-      li1.textContent = `Airport name: ${desArr[1][0]}`;
-      li2.textContent = `Location: ${desArr[1][1]}, ${desArr[1][2]}`;
+      li1.textContent = `Airport name: ${desArr[1][2]}`;
+      li2.textContent = `Location: ${desArr[1][4]}, ${desArr[1][3]}`;
       li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[1][0])} g`;
       li4.textContent = `Distance from your location: ${Math.floor(calArr[1][1])} km`;
       initMap(desArr[1][0], desArr[1][1]);
@@ -233,8 +235,8 @@
     const li4 = document.createElement('li');
 
     try {
-      li1.textContent = `Airport name: ${desArr[2][0]}`;
-      li2.textContent = `Location: ${desArr[2][1]}, ${desArr[2][2]}`;
+      li1.textContent = `Airport name: ${desArr[2][2]}`;
+      li2.textContent = `Location: ${desArr[2][4]}, ${desArr[2][3]}`;
       li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[2][0])} g`;
       li4.textContent = `Distance from your location: ${Math.floor(calArr[2][1])} km`;
       initMap(desArr[2][0], desArr[2][1]);
@@ -262,8 +264,8 @@
     const li4 = document.createElement('li');
 
     try {
-      li1.textContent = `Airport name: ${desArr[3][0]}`;
-      li2.textContent = `Location: ${desArr[3][1]}, ${desArr[3][2]}`;
+      li1.textContent = `Airport name: ${desArr[3][2]}`;
+      li2.textContent = `Location: ${desArr[3][4]}, ${desArr[3][3]}`;
       li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[3][0])} g`;
       li4.textContent = `Distance from your location: ${Math.floor(calArr[3][1])} km`;
       initMap(desArr[3][0], desArr[3][1]);
@@ -290,8 +292,8 @@
     const li4 = document.createElement('li');
 
     try {
-      li1.textContent = `Airport name: ${desArr[4][0]}`;
-      li2.textContent = `Location: ${desArr[4][1]}, ${desArr[4][2]}`;
+      li1.textContent = `Airport name: ${desArr[4][2]}`;
+      li2.textContent = `Location: ${desArr[4][4]}, ${desArr[4][3]}`;
       li3.textContent = `Expected Co2 Consumption: ${Math.floor(calArr[4][0])} g`;
       li4.textContent = `Distance from your location: ${Math.floor(calArr[4][1])} km`;
       initMap(desArr[4][0], desArr[4][1]);
