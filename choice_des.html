@@ -317,6 +317,8 @@ initMap();
     let co2_spent;
     let distance;
     let budget;
+    let co2_consumed;
+    let co2_left;
     // Figure out what is displayed in info card when clicking to fly and based on that assign values
     if (document.getElementById('airport1')) {
       airport = desArr[0][2];
@@ -343,10 +345,11 @@ initMap();
       const response = await fetch(`http://127.0.0.1:3000/co2_budget`); //get players co2_budget
       const jsonData = await response.json();
         budget = jsonData[0].co2_budget;
+        co2_consumed = jsonData[0].co2_consumed;
         console.log(budget);
-
+        co2_left = budget - co2_consumed
         // Check if budget left is more than co2_spent in choice
-      if ((budget - co2_spent) > 0) {
+      if ((co2_left - co2_spent) > 0) {
         const response = await fetch(`http://127.0.0.1:3000/${airport}/${co2_spent}/${distance}`);
         const jsonData = await response.json();
         console.log(jsonData);

@@ -269,7 +269,7 @@ def enter_choice(plane):
 # Get co2_budget of player - Riina
 @app.route('/co2_budget')
 def get_co2_budget():
-    sql = f'''SELECT co2_budget FROM player WHERE id = (SELECT MAX(id) FROM player)'''
+    sql = f'''SELECT co2_budget,co2_consumed FROM player WHERE id = (SELECT MAX(id) FROM player)'''
     cursor = connection.cursor(dictionary=True)
     cursor.execute(sql)
     result = cursor.fetchall()
