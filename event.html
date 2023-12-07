@@ -85,6 +85,10 @@ async function show_result() {
         const jsonData = await response.json();
         console.log(jsonData);
 
+        const response2 = await fetch(`http://127.0.0.1:3000/update_player`);
+        const jsonData2 = await response2.json();
+        console.log(jsonData2)
+
         setTimeout(() => {
             alert(`The result of your travel this round:
 
@@ -98,7 +102,7 @@ async function show_result() {
 }
 
 function redirect() {
-    location.href = "main.html"
+  location.href = "main.html"
 }
 
 window.addEventListener('load', () => {
@@ -106,6 +110,7 @@ window.addEventListener('load', () => {
 });
 
 show_event();
+
 
 </script>
 </body>
