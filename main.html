@@ -98,12 +98,12 @@
       console.log(jsonData3);
 
       document.querySelector('#round').innerHTML = 'ROUND ' + jsonData3;
-      const remaining = jsonData.co2_budget - jsonData.co2_consumed;
+      const remaining = jsonData[2] - jsonData[3];
 
-      const text = `<li>Player Name: ${jsonData.player_name}</li>
+      const text = `<li>Player Name: ${jsonData[1]}</li>
         <li>Current Location : ${jsonData2[0]}, ${jsonData2[1]}</li>
         <li>Remaining Co2 Budget: ${remaining}</li>
-        <li>Travelled Distance: ${jsonData.total_travelled}</li>`;
+        <li>Travelled Distance: ${jsonData[4]}</li>`;
       const list = document.getElementById('list');
       list.innerHTML = text;
 
