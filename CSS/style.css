@@ -97,6 +97,20 @@ body {
 /* button style ends */
 /* front page ends*/
 
+/* id.html */
+#intro{
+  margin-bottom: 2rem;
+}
+
+
+#intro p {
+  font-size: x-large;
+}
+
+#name, #submit {
+  width: 10rem;
+  height: 2rem;
+}
 /* main page starts */
 h2 {
   float: left;
