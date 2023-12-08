@@ -33,6 +33,24 @@
 </footer>
 <script>
   'use strict';
+window.addEventListener('load', async () => {
+  let coord =[];
+  try {
+    const response2 = await fetch(`http://127.0.0.1:3000/coord`);
+    const jsonData2 = await response2.json();
+    console.log(jsonData2);
+
+    coord.push(jsonData2[2], jsonData2[3]);
+    console.log(coord);
+
+    // Call initMap after fetching the coordinates
+    await initMap(coord[0], coord[1]);
+    await cal_distance();
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
 
     //map
  (g => {
@@ -58,7 +76,7 @@
 
   let map;
 
-    async function initMap(lat = 60.3172, lon= 24.963301) {
+    async function initMap(lat, lon) {
     let position = {lat: 60.3172, lng: 24.963301};
     position.lat = lat;
     position.lng = lon;
@@ -80,7 +98,6 @@
     });
   }
 
-initMap();
 
   const back = document.getElementById('back');
   back.addEventListener('click', (evt) => {
@@ -90,8 +107,7 @@ just click the <NEXT> button!`);
     if (goBack) {
       back.onclick = location.href = 'choice.html';
     }
-  }); // this needs to be changed
-
+  });
 
 
   //info panel
@@ -311,7 +327,7 @@ just click the <NEXT> button!`);
     info.appendChild(li4);
   }
 
-  cal_distance();
+
 
   async function game_over_check() {
     let airport;
