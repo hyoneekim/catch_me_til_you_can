@@ -120,7 +120,7 @@ h2 {
 }
 
 
-#quit, #back, #start, #destination, #next {
+#quit, #back, #back2, #start, #destination, #next {
   width: 30%;
   margin-right: 3rem;
 
@@ -201,6 +201,7 @@ footer {
 }
 #choose {
   text-align: left;
+  height: 10.6%;
 }
 #choice_bar {
   width: 40%;
