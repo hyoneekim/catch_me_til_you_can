@@ -84,9 +84,10 @@ initMap();
 
   const back = document.getElementById('back');
   back.addEventListener('click', (evt) => {
-    confirm(`Do you want to go back to choose another airplane?
-    When there isn't any available destination, the game will be over!`);
-    if (back) {
+    const goBack = confirm(`Thinking of switching to another airplane? Go ahead!
+However, if you're unable to find any other available destinations,
+just click the <NEXT> button!`);
+    if (goBack) {
       back.onclick = location.href = 'choice.html';
     }
   }); // this needs to be changed
