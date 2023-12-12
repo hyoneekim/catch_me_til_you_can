@@ -97,14 +97,20 @@ def get_current(userid):
 
 
 # sending the result data back to JS to display the info -su
-@app.route('/result/<turn>/<userid>')
-def get_result(turn, userid):
+@app.route('/result/turn/userid')
+def get_result():
+    sql1 = f'''SELECT player_name FROM player WHERE id = (SELECT MAX(id) FROM player)'''
+    cursor = connection.cursor()
+    cursor.execute(sql1)
+    result1 = cursor.fetchall()
+    name = result1[0][0]
+
     # placeholder user id and turn
-    sql = f'''SELECT distance_km, co2_spent from choice WHERE turn ={turn} AND player_name = "{userid}"'''
+    sql2 = f'''SELECT distance_km, co2_spent from choice WHERE player_name = "{name}" AND turn = (SELECT MAX(turn) FROM choice WHERE player_name = "{name}" )'''
     cursor = connection.cursor(dictionary=True)
-    cursor.execute(sql)
-    result = cursor.fetchone()
-    return json.dumps(result)
+    cursor.execute(sql2)
+    result2 = cursor.fetchone()
+    return json.dumps(result2)
 
 
 # fetching event occurrence data from JS & updating DB -Su
@@ -113,26 +119,28 @@ def receive_pick():
     data = request.json
     received_pick = data.get('pick')
 
-    # placeholder user id and turn
-    turn = 1
-    userid = 'moikka'
+    sql1 = f'''SELECT player_name FROM player WHERE id = (SELECT MAX(id) FROM player)'''
+    cursor = connection.cursor()
+    cursor.execute(sql1)
+    result1 = cursor.fetchall()
+    name = result1[0][0]
 
     if received_pick[2] == 'NULL':
-        sql = f"UPDATE choice SET event_occurred = {received_pick[0]} WHERE turn = {turn} AND player_name = '{userid}'"
+        sql2 = f"UPDATE choice SET event_occurred = {received_pick[0]} WHERE player_name = '{name}' AND turn = (SELECT MAX(turn) FROM choice WHERE player_name = '{name}')"
         cursor = connection.cursor()
-        cursor.execute(sql)
+        cursor.execute(sql2)
 
     else:
 
         if received_pick[2] == 'neg':
-            sql2 = f"UPDATE choice SET event_occurred = {received_pick[0]}, co2_spent = co2_spent + co2_spent * {received_pick[4]} WHERE turn = {turn} AND player_name = '{userid}'"
-            cursor = connection.cursor()
-            cursor.execute(sql2)
-
-        elif received_pick[2] == 'pos':
-            sql3 = f"UPDATE choice SET event_occurred = {received_pick[0]}, co2_spent = co2_spent - co2_spent * {received_pick[4]} WHERE turn = {turn} AND player_name = '{userid}'"
+            sql3 = f"UPDATE choice SET event_occurred = {received_pick[0]}, co2_spent = co2_spent + co2_spent * {received_pick[4]} WHERE player_name = '{name}' AND turn = (SELECT MAX(turn) FROM choice WHERE player_name = '{name}')"
             cursor = connection.cursor()
             cursor.execute(sql3)
+
+        elif received_pick[2] == 'pos':
+            sql4 = f"UPDATE choice SET event_occurred = {received_pick[0]}, co2_spent = co2_spent - co2_spent * {received_pick[4]} WHERE player_name = '{name}' AND turn = (SELECT MAX(turn) FROM choice WHERE player_name = '{name}')"
+            cursor = connection.cursor()
+            cursor.execute(sql4)
 
     return json.dumps({'Result': 'Updated'})
 
@@ -336,6 +344,9 @@ def update_player():
     result2 = cursor.fetchall()
     distance = result2[0][0]
     co2 = result2[0][1]
+
+
+
 
     # Update player tables info
     sql3 = f'''UPDATE player SET co2_consumed = (co2_consumed + {co2}), total_travelled = (total_travelled + {distance}) WHERE player_name = "{player}"'''

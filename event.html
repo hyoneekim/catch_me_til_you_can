@@ -76,12 +76,9 @@ async function show_event() {
 }
 
 async function show_result() {
-    // Placeholder
-    const turn = 1;
-    const userid = 'su';
 
     try {
-        const response = await fetch(`http://127.0.0.1:3000/result/${turn}/${userid}`);
+        const response = await fetch(`http://127.0.0.1:3000/result/turn/userid`);
         const jsonData = await response.json();
         console.log(jsonData);
 
